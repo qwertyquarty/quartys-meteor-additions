@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 
 import de.qwqu.qma.commands.EntityTPCommand;
 import de.qwqu.qma.modules.ModuleExample;
+import de.qwqu.qma.modules.Stick;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
@@ -21,6 +22,7 @@ public class Addon extends MeteorAddon {
 
     // Modules
     Modules.get().add(new ModuleExample());
+    Modules.get().add(new Stick());
 
     // Commands
     Commands.add(new EntityTPCommand());
