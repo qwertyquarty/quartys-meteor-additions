@@ -1,10 +1,8 @@
 {
   "required": true,
-  "package": "com.example.addon.mixin",
+  "package": "de.qwqu.qma.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": [
-    "ExampleMixin"
-  ],
+  "client": ["ExampleMixin"],
   "injectors": {
     "defaultRequire": 1
   }
