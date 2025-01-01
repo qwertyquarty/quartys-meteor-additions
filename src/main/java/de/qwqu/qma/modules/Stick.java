@@ -123,8 +123,7 @@ public class Stick extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    Entity target = Addon.stick_targetEntity != null ? Addon.stick_targetEntity
-        : getTargetFromName(Addon.stick_targetName);
+    Entity target = getTargetFromName(Addon.stick_targetName);
     mc.player.getAbilities().flying = !(target == null);
     if (target == null)
       return;
