@@ -2,19 +2,24 @@ package de.qwqu.qma;
 
 import com.mojang.logging.LogUtils;
 
-import de.qwqu.qma.commands.EntityTPCommand;
-import de.qwqu.qma.modules.ModuleExample;
-import de.qwqu.qma.modules.Stick;
+import de.qwqu.qma.commands.*;
+import de.qwqu.qma.modules.*;
+
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
+import net.minecraft.entity.Entity;
+
 import org.slf4j.Logger;
 
 public class Addon extends MeteorAddon {
   public static final Logger LOG = LogUtils.getLogger();
   public static final Category CATEGORY = new Category("QMA");
+
+  public static String stick_targetName = "";
+  public static Entity stick_targetEntity = null;
 
   @Override
   public void onInitialize() {
@@ -26,6 +31,7 @@ public class Addon extends MeteorAddon {
 
     // Commands
     Commands.add(new EntityTPCommand());
+    Commands.add(new StickTargetCommand());
   }
 
   @Override

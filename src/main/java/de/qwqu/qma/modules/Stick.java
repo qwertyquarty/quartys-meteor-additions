@@ -32,8 +32,8 @@ public class Stick extends Module {
       .description("The mode at which to follow the player.")
       .defaultValue(Mode.Automatic)
       .onChanged(onChanged -> {
-        targetName = "";
-        targetEntity = null;
+        Addon.stick_targetName = "";
+        Addon.stick_targetEntity = null;
       })
       .build());
   private final Setting<Follow> followMode = sgGeneral.add(new EnumSetting.Builder<Follow>()
@@ -80,8 +80,6 @@ public class Stick extends Module {
   }
 
   private final List<Entity> targets = new ArrayList<>();
-  private String targetName = "";
-  private Entity targetEntity = null;
   private double time = 0;
 
   @Override
@@ -109,14 +107,14 @@ public class Stick extends Module {
       if (event.action == KeyAction.Press && event.button == GLFW_MOUSE_BUTTON_MIDDLE
           && mc.currentScreen == null) {
         if (mc.targetedEntity instanceof PlayerEntity player) {
-          targetName = player.getName().toString();
-          targetEntity = null;
+          Addon.stick_targetName = player.getName().toString();
+          Addon.stick_targetEntity = null;
         } else if (mc.targetedEntity != null) {
-          targetEntity = mc.targetedEntity;
-          targetName = "";
+          Addon.stick_targetEntity = mc.targetedEntity;
+          Addon.stick_targetName = "";
         } else {
-          targetName = "";
-          targetEntity = null;
+          Addon.stick_targetName = "";
+          Addon.stick_targetEntity = null;
           mc.player.getAbilities().flying = false;
         }
       }
@@ -125,7 +123,8 @@ public class Stick extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    Entity target = targetEntity != null ? targetEntity : getTargetFromName(targetName);
+    Entity target = Addon.stick_targetEntity != null ? Addon.stick_targetEntity
+        : getTargetFromName(Addon.stick_targetName);
     mc.player.getAbilities().flying = !(target == null);
     if (target == null)
       return;
@@ -164,19 +163,19 @@ public class Stick extends Module {
 
   private void checkEntity(Entity target) {
     if (!mc.world.getPlayers().contains(target) && targetMode.get() == Mode.Automatic) {
-      targetName = "";
-      targetEntity = null;
+      Addon.stick_targetName = "";
+      Addon.stick_targetEntity = null;
     }
 
-    if (targetName.isEmpty() && targetEntity == null && targetMode.get() == Mode.Automatic) {
+    if (Addon.stick_targetName.isEmpty() && Addon.stick_targetEntity == null && targetMode.get() == Mode.Automatic) {
       setTarget();
     }
   }
 
   @Override
   public void onDeactivate() {
-    targetName = "";
-    targetEntity = null;
+    Addon.stick_targetName = "";
+    Addon.stick_targetEntity = null;
     mc.player.getAbilities().flying = false;
   }
 
@@ -185,11 +184,11 @@ public class Stick extends Module {
     if (!targets.isEmpty()) {
       Entity closest = targets.get(0);
       if (closest instanceof PlayerEntity) {
-        targetName = closest.getName().toString();
-        targetEntity = null;
+        Addon.stick_targetName = closest.getName().toString();
+        Addon.stick_targetEntity = null;
       } else {
-        targetEntity = closest;
-        targetName = "";
+        Addon.stick_targetEntity = closest;
+        Addon.stick_targetName = "";
       }
     }
   }
