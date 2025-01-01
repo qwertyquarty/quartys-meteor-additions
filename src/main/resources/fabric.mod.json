@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "quartys-meteor-additions",
   "version": "${version}",
-  "name": "Addon Template",
-  "description": "An addon template for Meteor Client addons.",
+  "name": "Quarty's meteor additions",
+  "description": "Meteor addon with useful stuff.",
   "authors": ["qwertyquarty"],
   "contact": {
     "repo": "https://github.com/MeteorDevelopment/meteor-addon-template"
@@ -19,7 +19,7 @@
   },
   "depends": {
     "java": ">=17",
-    "minecraft": ["${mc_version}"],
+    "minecraft": ">=1.20.6",
     "meteor-client": "*"
   }
 }
