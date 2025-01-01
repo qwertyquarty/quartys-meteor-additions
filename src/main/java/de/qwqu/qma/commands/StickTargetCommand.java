@@ -45,7 +45,7 @@ public class StickTargetCommand extends Command {
       }
 
       Addon.stick_targetEntity = targetEntity;
-      Addon.stick_targetName = targetEntity.getName().toString();
+      Addon.stick_targetName = targetEntity.getName().getString();
 
       return SINGLE_SUCCESS;
     }));

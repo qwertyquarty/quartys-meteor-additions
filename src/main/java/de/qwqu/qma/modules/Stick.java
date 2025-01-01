@@ -107,7 +107,7 @@ public class Stick extends Module {
       if (event.action == KeyAction.Press && event.button == GLFW_MOUSE_BUTTON_MIDDLE
           && mc.currentScreen == null) {
         if (mc.targetedEntity instanceof PlayerEntity player) {
-          Addon.stick_targetName = player.getName().toString();
+          Addon.stick_targetName = player.getName().getString();
           Addon.stick_targetEntity = null;
         } else if (mc.targetedEntity != null) {
           Addon.stick_targetEntity = mc.targetedEntity;
@@ -155,7 +155,7 @@ public class Stick extends Module {
 
   private Entity getTargetFromName(String name) {
     return mc.world.getPlayers().stream()
-        .filter(player -> player.getName().toString().equals(name))
+        .filter(player -> player.getName().getString().equals(name))
         .findFirst()
         .orElse(null);
   }
@@ -183,7 +183,7 @@ public class Stick extends Module {
     if (!targets.isEmpty()) {
       Entity closest = targets.get(0);
       if (closest instanceof PlayerEntity) {
-        Addon.stick_targetName = closest.getName().toString();
+        Addon.stick_targetName = closest.getName().getString();
         Addon.stick_targetEntity = null;
       } else {
         Addon.stick_targetEntity = closest;
