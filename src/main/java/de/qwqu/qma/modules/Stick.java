@@ -173,8 +173,6 @@ public class Stick extends Module {
 
   @Override
   public void onDeactivate() {
-    Addon.stick_targetName = "";
-    Addon.stick_targetEntity = null;
     mc.player.getAbilities().flying = false;
   }
 
