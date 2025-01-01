@@ -28,6 +28,7 @@ public class Addon extends MeteorAddon {
     // Modules
     Modules.get().add(new ModuleExample());
     Modules.get().add(new Stick());
+    Modules.get().add(new Slotter());
 
     // Commands
     Commands.add(new EntityTPCommand());
