@@ -43,6 +43,7 @@ public class Addon extends MeteorAddon {
     Commands.add(new EntityTPCommand());
     Commands.add(new StickTargetCommand());
     Commands.add(new LoopTPCommand());
+    Commands.add(new ZeroCommand());
 
     // Hud
     Hud.get().register(StickTarget.INFO);
