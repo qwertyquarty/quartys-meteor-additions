@@ -29,6 +29,10 @@ public class Addon extends MeteorAddon {
   public static Double ltp_y = 0.0;
   public static Double ltp_z = 0.0;
 
+  public static Double orbit_x = 0.0;
+  public static Double orbit_y = 0.0;
+  public static Double orbit_z = 0.0;
+
   @Override
   public void onInitialize() {
     LOG.info("Initializing Meteor Addon Template");
@@ -38,12 +42,14 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new Stick());
     Modules.get().add(new Slotter());
     Modules.get().add(new LoopTP());
+    Modules.get().add(new Orbit());
 
     // Commands
     Commands.add(new EntityTPCommand());
     Commands.add(new StickTargetCommand());
     Commands.add(new LoopTPCommand());
     Commands.add(new ZeroCommand());
+    Commands.add(new OrbitCommand());
 
     // Hud
     Hud.get().register(StickTarget.INFO);
