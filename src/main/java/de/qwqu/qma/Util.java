@@ -6,9 +6,13 @@ import net.minecraft.entity.Entity;
 
 public class Util {
   public static Entity getTargetFromName(String name) {
-    return mc.world.getPlayers().stream()
-        .filter(player -> player.getName().getString().equals(name) && player != mc.player)
-        .findFirst()
-        .orElse(null);
+    Entity target = null;
+    for (Entity entity : mc.world.getEntities()) {
+      if (entity != mc.player && entity.getName().getString().equalsIgnoreCase(name)) {
+        target = entity;
+        break;
+      }
+    }
+    return target;
   }
 }

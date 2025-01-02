@@ -29,19 +29,15 @@ public class Stick extends Module {
 
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-  private final Setting<Mode> targetMode = sgGeneral.add(new EnumSetting.Builder<Mode>()
-      .name("target-mode")
-      .description("The mode at which to follow the player.")
-      .defaultValue(Mode.Automatic)
-      .onChanged(onChanged -> {
-        Addon.stick_targetName = "";
-        Addon.stick_targetEntity = null;
-      })
-      .build());
   private final Setting<Follow> followMode = sgGeneral.add(new EnumSetting.Builder<Follow>()
       .name("follow")
       .description("Which parts rotation to follow.")
       .defaultValue(Follow.Head)
+      .build());
+  private final Setting<Boolean> rotate = sgGeneral.add(new BoolSetting.Builder()
+      .name("rotate")
+      .description("Sets the rotation to the target's rotation.")
+      .defaultValue(true)
       .build());
   private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
       .name("range")
@@ -78,18 +74,11 @@ public class Stick extends Module {
       .build());
 
   public Stick() {
-    super(Addon.CATEGORY, "stick", "Stick to a player.");
+    super(Addon.CATEGORY, "stick+", "Stick to a player.");
   }
 
   private final List<Entity> targets = new ArrayList<>();
   private double time = 0;
-
-  @Override
-  public void onActivate() {
-    if (targetMode.get() == Mode.Automatic) {
-      setTarget();
-    }
-  }
 
   private boolean entityCheck(Entity entity) {
     if (entity.equals(mc.player) || entity.equals(mc.cameraEntity))
@@ -105,31 +94,33 @@ public class Stick extends Module {
 
   @EventHandler
   private void onMouseButton(MouseButtonEvent event) {
-    if (targetMode.get() == Mode.MiddleClick) {
-      if (event.action == KeyAction.Press && event.button == GLFW_MOUSE_BUTTON_MIDDLE
-          && mc.currentScreen == null) {
-        if (mc.targetedEntity instanceof PlayerEntity player) {
-          Addon.stick_targetName = player.getName().getString();
-          Addon.stick_targetEntity = null;
-        } else if (mc.targetedEntity != null) {
-          Addon.stick_targetEntity = mc.targetedEntity;
-          Addon.stick_targetName = "";
-        } else {
-          Addon.stick_targetName = "";
-          Addon.stick_targetEntity = null;
-          mc.player.getAbilities().flying = false;
-        }
+    if (event.action == KeyAction.Press && event.button == GLFW_MOUSE_BUTTON_MIDDLE
+        && mc.currentScreen == null) {
+      if (mc.targetedEntity instanceof PlayerEntity player) {
+        Addon.stick_targetName = player.getName().getString();
+        Addon.stick_targetEntity = null;
+      } else if (mc.targetedEntity != null) {
+        Addon.stick_targetEntity = mc.targetedEntity;
+        Addon.stick_targetName = "";
+      } else {
+        Addon.stick_targetName = "";
+        Addon.stick_targetEntity = null;
+        mc.player.getAbilities().flying = false;
       }
+
     }
   }
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    Entity target = Util.getTargetFromName(Addon.stick_targetName);
+    if ((Addon.stick_targetEntity != null && Addon.stick_targetEntity.isPlayer()) || Addon.stick_targetName != "")
+      Addon.stick_targetEntity = Util.getTargetFromName(Addon.stick_targetName);
+
+    Entity target = Addon.stick_targetEntity;
+
     mc.player.getAbilities().flying = !(target == null);
     if (target == null)
       return;
-    checkEntity(target);
 
     time += 0.05;
 
@@ -141,9 +132,11 @@ public class Stick extends Module {
       cosWave = Math.cos(time * sineSpeed.get()) * sineOffset.get();
     }
 
+    if (rotate.get())
+      Rotations.rotate(target.getBodyYaw(), 0);
+
     switch (followMode.get()) {
       case Head -> {
-        Rotations.rotate(Rotations.getYaw(target), 0);
         Position head = target.raycast(-1 + offset.get().z, 1f / 20f, false).getPos();
         mc.player.setPosition(head.getX() + offset.get().x + sineWave, head.getY() + offset.get().y,
             head.getZ() + cosWave);
@@ -152,17 +145,6 @@ public class Stick extends Module {
         mc.player.setPosition(target.getX() + offset.get().x + sineWave, target.getY() + offset.get().y,
             target.getZ() + offset.get().z + cosWave);
       }
-    }
-  }
-
-  private void checkEntity(Entity target) {
-    if (!mc.world.getPlayers().contains(target) && targetMode.get() == Mode.Automatic) {
-      Addon.stick_targetName = "";
-      Addon.stick_targetEntity = null;
-    }
-
-    if (Addon.stick_targetName.isEmpty() && Addon.stick_targetEntity == null && targetMode.get() == Mode.Automatic) {
-      setTarget();
     }
   }
 
@@ -183,11 +165,6 @@ public class Stick extends Module {
         Addon.stick_targetName = "";
       }
     }
-  }
-
-  public enum Mode {
-    MiddleClick,
-    Automatic
   }
 
   public enum Follow {

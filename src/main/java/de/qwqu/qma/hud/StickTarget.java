@@ -18,6 +18,7 @@ public class StickTarget extends HudElement {
   public void render(HudRenderer renderer) {
     if (isInEditor()) {
       renderer.text("Target: qwertyquarty", x, y, Color.WHITE, true);
+      setSize(renderer.textWidth("Target: qwertyquarty", true), renderer.textHeight(true));
       return;
     }
 
