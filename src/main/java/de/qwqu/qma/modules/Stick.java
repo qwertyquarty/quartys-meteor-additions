@@ -1,6 +1,7 @@
 package de.qwqu.qma.modules;
 
 import de.qwqu.qma.Addon;
+import de.qwqu.qma.Util;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.events.meteor.MouseButtonEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
@@ -11,6 +12,7 @@ import meteordevelopment.meteorclient.utils.misc.input.KeyAction;
 import meteordevelopment.meteorclient.utils.player.PlayerUtils;
 import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.orbit.EventHandler;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -123,7 +125,7 @@ public class Stick extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    Entity target = getTargetFromName(Addon.stick_targetName);
+    Entity target = Util.getTargetFromName(Addon.stick_targetName);
     mc.player.getAbilities().flying = !(target == null);
     if (target == null)
       return;
@@ -151,13 +153,6 @@ public class Stick extends Module {
             target.getZ() + offset.get().z + cosWave);
       }
     }
-  }
-
-  private Entity getTargetFromName(String name) {
-    return mc.world.getPlayers().stream()
-        .filter(player -> player.getName().getString().equals(name))
-        .findFirst()
-        .orElse(null);
   }
 
   private void checkEntity(Entity target) {

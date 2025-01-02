@@ -1,11 +1,9 @@
 package de.qwqu.qma.commands;
 
-import java.util.UUID;
-
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
-import meteordevelopment.meteorclient.commands.arguments.PlayerListEntryArgumentType;
-import net.minecraft.client.network.PlayerListEntry;
+import de.qwqu.qma.Util;
+import de.qwqu.qma.commands.arguments.PlayerNameOrArgumentType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -17,26 +15,10 @@ public class EntityTPCommand extends Command {
 
   @Override
   public void build(LiteralArgumentBuilder<CommandSource> builder) {
-    builder.then(argument("player", PlayerListEntryArgumentType.create()).executes(context -> {
-      PlayerListEntry lookUpTarget = PlayerListEntryArgumentType.get(context);
-      if (lookUpTarget == null) {
-        error("Couldn't find lookup target.");
-        return SINGLE_SUCCESS;
-      }
+    builder.then(argument("player", PlayerNameOrArgumentType.create()).executes(context -> {
+      String targetName = context.getInput().split(" ")[1];
 
-      UUID uuid = lookUpTarget.getProfile().getId();
-      if (uuid == null) {
-        error("Player has no UUID.");
-        return SINGLE_SUCCESS;
-      }
-
-      Entity targetEntity = null;
-      for (Entity entity : mc.world.getEntities()) {
-        if (entity.getUuid().equals(uuid)) {
-          targetEntity = entity;
-          break;
-        }
-      }
+      Entity targetEntity = Util.getTargetFromName(targetName);
 
       if (targetEntity == null) {
         error("Couldn't find player.");
