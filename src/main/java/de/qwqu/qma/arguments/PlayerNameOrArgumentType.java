@@ -1,4 +1,4 @@
-package de.qwqu.qma.commands.arguments;
+package de.qwqu.qma.arguments;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;

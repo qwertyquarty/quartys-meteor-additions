@@ -3,7 +3,7 @@ package de.qwqu.qma.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
 import de.qwqu.qma.Util;
-import de.qwqu.qma.commands.arguments.PlayerNameOrArgumentType;
+import de.qwqu.qma.arguments.PlayerNameOrArgumentType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
