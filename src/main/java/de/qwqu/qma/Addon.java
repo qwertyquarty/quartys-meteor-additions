@@ -25,6 +25,10 @@ public class Addon extends MeteorAddon {
   public static String stick_targetName = "";
   public static Entity stick_targetEntity = null;
 
+  public static Double ltp_x = 0.0;
+  public static Double ltp_y = 0.0;
+  public static Double ltp_z = 0.0;
+
   @Override
   public void onInitialize() {
     LOG.info("Initializing Meteor Addon Template");
@@ -33,10 +37,12 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new ModuleExample());
     Modules.get().add(new Stick());
     Modules.get().add(new Slotter());
+    Modules.get().add(new LoopTP());
 
     // Commands
     Commands.add(new EntityTPCommand());
     Commands.add(new StickTargetCommand());
+    Commands.add(new LoopTPCommand());
 
     // Hud
     Hud.get().register(StickTarget.INFO);
