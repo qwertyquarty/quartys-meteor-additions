@@ -33,8 +33,8 @@ public class Orbit extends Module {
       .defaultValue(true)
       .build());
   private final Setting<Boolean> toggleY = sgGeneral.add(new BoolSetting.Builder()
-      .name("orbit-y")
-      .description("Toggle orbit around Y axis.")
+      .name("lock-y")
+      .description("Locks the Y axis.")
       .defaultValue(true)
       .build());
   private final Setting<Boolean> toggleZ = sgGeneral.add(new BoolSetting.Builder()
