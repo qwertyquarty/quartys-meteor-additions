@@ -51,6 +51,7 @@ public class Addon extends MeteorAddon {
     Commands.add(new ZeroCommand());
     Commands.add(new OrbitCommand());
     Commands.add(new CeilCommand());
+    Commands.add(new VGetCommand());
 
     // Hud
     Hud.get().register(StickTarget.INFO);
