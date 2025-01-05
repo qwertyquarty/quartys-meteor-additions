@@ -44,6 +44,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new LoopTP());
     Modules.get().add(new Orbit());
     Modules.get().add(new NoCollision());
+    Modules.get().add(new Elytra());
 
     // Commands
     Commands.add(new EntityTPCommand());
