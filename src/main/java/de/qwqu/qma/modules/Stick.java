@@ -117,9 +117,11 @@ public class Stick extends Module {
 
     Entity target = Addon.stick_targetEntity;
 
-    mc.player.getAbilities().flying = !(target == null);
-    if (target == null)
+    if (target != null) {
+      mc.player.getAbilities().flying = true;
+    } else {
       return;
+    }
 
     time += 0.05;
 
