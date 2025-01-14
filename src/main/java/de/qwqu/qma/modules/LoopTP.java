@@ -2,8 +2,8 @@ package de.qwqu.qma.modules;
 
 import de.qwqu.qma.Addon;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.meteorclient.systems.modules.Module;
+import meteordevelopment.orbit.EventHandler;
 
 public class LoopTP extends Module {
   public LoopTP() {

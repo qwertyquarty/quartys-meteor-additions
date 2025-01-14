@@ -1,11 +1,12 @@
 package de.qwqu.qma.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import de.qwqu.qma.Addon;
+import de.qwqu.qma.arguments.ClientPosArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.command.CommandSource;
-import de.qwqu.qma.arguments.ClientPosArgumentType;
 
 public class LoopTPCommand extends Command {
   public LoopTPCommand() {

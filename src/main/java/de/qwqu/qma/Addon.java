@@ -1,11 +1,26 @@
 package de.qwqu.qma;
 
+import org.slf4j.Logger;
+
 import com.mojang.logging.LogUtils;
 
-import de.qwqu.qma.commands.*;
-import de.qwqu.qma.modules.*;
-import de.qwqu.qma.hud.*;
-
+import de.qwqu.qma.commands.CeilCommand;
+import de.qwqu.qma.commands.ElytraCommand;
+import de.qwqu.qma.commands.EntityTPCommand;
+import de.qwqu.qma.commands.LoopTPCommand;
+import de.qwqu.qma.commands.OrbitCommand;
+import de.qwqu.qma.commands.StickTargetCommand;
+import de.qwqu.qma.commands.VFillCommand;
+import de.qwqu.qma.commands.VGetCommand;
+import de.qwqu.qma.commands.ZeroCommand;
+import de.qwqu.qma.hud.StickTarget;
+import de.qwqu.qma.modules.Elytra;
+import de.qwqu.qma.modules.LoopTP;
+import de.qwqu.qma.modules.ModuleExample;
+import de.qwqu.qma.modules.NoCollision;
+import de.qwqu.qma.modules.Orbit;
+import de.qwqu.qma.modules.Slotter;
+import de.qwqu.qma.modules.Stick;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
@@ -14,8 +29,6 @@ import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.entity.Entity;
-
-import org.slf4j.Logger;
 
 public class Addon extends MeteorAddon {
   public static final Logger LOG = LogUtils.getLogger();

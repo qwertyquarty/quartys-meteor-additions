@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import de.qwqu.qma.arguments.ClientPosArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
+import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.BlockStateArgument;
@@ -12,7 +13,6 @@ import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.block.BlockState;
 
 public class VFillCommand extends Command {
   private static final CommandRegistryAccess REGISTRY_ACCESS = CommandManager
