@@ -2,7 +2,7 @@
   "required": true,
   "package": "de.qwqu.qma.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["ExampleMixin"],
+  "client": ["NoPitchLimitMixin"],
   "injectors": {
     "defaultRequire": 1
   }

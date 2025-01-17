@@ -18,6 +18,7 @@ import de.qwqu.qma.modules.Elytra;
 import de.qwqu.qma.modules.LoopTP;
 import de.qwqu.qma.modules.ModuleExample;
 import de.qwqu.qma.modules.NoCollision;
+import de.qwqu.qma.modules.NoPitchLimit;
 import de.qwqu.qma.modules.Orbit;
 import de.qwqu.qma.modules.Slotter;
 import de.qwqu.qma.modules.Stick;
@@ -58,6 +59,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new Orbit());
     Modules.get().add(new NoCollision());
     Modules.get().add(new Elytra());
+    Modules.get().add(new NoPitchLimit());
 
     // Commands
     Commands.add(new EntityTPCommand());
