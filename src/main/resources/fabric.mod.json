@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Quarty's meteor additions",
   "description": "Meteor addon with useful stuff.",
-  "authors": ["qwertyquarty"],
+  "authors": ["qwertyquarty", "EdwiP"],
   "contact": {
     "repo": "https://github.com/MeteorDevelopment/meteor-addon-template"
   },

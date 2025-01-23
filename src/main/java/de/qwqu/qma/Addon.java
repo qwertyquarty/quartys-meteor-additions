@@ -16,11 +16,13 @@ import de.qwqu.qma.commands.ZeroCommand;
 import de.qwqu.qma.hud.StickTarget;
 import de.qwqu.qma.modules.Elytra;
 import de.qwqu.qma.modules.LoopTP;
+import de.qwqu.qma.modules.MileyCyrus;
 import de.qwqu.qma.modules.ModuleExample;
 import de.qwqu.qma.modules.NoCollision;
 import de.qwqu.qma.modules.NoPitchLimit;
 import de.qwqu.qma.modules.Orbit;
 import de.qwqu.qma.modules.Slotter;
+import de.qwqu.qma.modules.SpamPlus;
 import de.qwqu.qma.modules.Stick;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
@@ -60,6 +62,8 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new NoCollision());
     Modules.get().add(new Elytra());
     Modules.get().add(new NoPitchLimit());
+    Modules.get().add(new SpamPlus());
+    Modules.get().add(new MileyCyrus());
 
     // Commands
     Commands.add(new EntityTPCommand());
