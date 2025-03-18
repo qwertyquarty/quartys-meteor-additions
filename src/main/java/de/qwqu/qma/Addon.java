@@ -51,6 +51,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new FidgetSpinner());
     Modules.get().add(new Sticker());
     Modules.get().add(new BreakRenderer());
+    Modules.get().add(new TeleportCrash());
 
     // Commands
     Commands.add(new EntityTPCommand());
