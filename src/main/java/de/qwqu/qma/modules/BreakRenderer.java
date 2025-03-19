@@ -20,43 +20,39 @@ public class BreakRenderer extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
   private final Setting<Boolean> fadeShapes = sgGeneral.add(new BoolSetting.Builder()
-          .name("fade-shapes")
-          .description("Fade the shape alpha values or not.")
-          .defaultValue(true)
-          .build()
-  );
+      .name("fade-shapes")
+      .description("Fade the shape alpha values or not.")
+      .defaultValue(true)
+      .build());
 
   private final Setting<Integer> renderTime = sgGeneral.add(new IntSetting.Builder()
-          .name("render-time")
-          .description("For how long the shapes are rendered.")
-          .defaultValue(500)
-          .min(1)
-          .sliderRange(0, 5000)
-          .build()
-  );
+      .name("render-time")
+      .description("For how long the shapes are rendered.")
+      .defaultValue(500)
+      .min(1)
+      .sliderRange(0, 5000)
+      .build());
 
   private final Setting<ShapeMode> shapeMode = sgGeneral.add(new EnumSetting.Builder<ShapeMode>()
-          .name("shape-mode")
-          .description("How the shapes are rendered.")
-          .defaultValue(ShapeMode.Both)
-          .build()
-  );
+      .name("shape-mode")
+      .description("How the shapes are rendered.")
+      .defaultValue(ShapeMode.Both)
+      .build());
 
   private final Setting<SettingColor> sideColor = sgGeneral.add(new ColorSetting.Builder()
-          .name("side-color")
-          .description("The side color of the rendering.")
-          .defaultValue(new SettingColor(225, 0, 0, 75))
-          .build()
-  );
+      .name("side-color")
+      .description("The side color of the rendering.")
+      .defaultValue(new SettingColor(225, 0, 0, 75))
+      .build());
 
   private final Setting<SettingColor> lineColor = sgGeneral.add(new ColorSetting.Builder()
-          .name("line-color")
-          .description("The line color of the rendering.")
-          .defaultValue(new SettingColor(225, 0, 0, 255))
-          .build()
-  );
+      .name("line-color")
+      .description("The line color of the rendering.")
+      .defaultValue(new SettingColor(225, 0, 0, 255))
+      .build());
 
-  private record BreakTime(long time, BlockPos pos) {}
+  private record BreakTime(long time, BlockPos pos) {
+  }
 
   private final List<BreakTime> breakTimes = new LinkedList<>();
 
@@ -66,8 +62,13 @@ public class BreakRenderer extends Module {
 
   @EventHandler
   private void onBlockUpdate(BlockUpdateEvent event) {
-    if (!event.newState.isAir()) return;
-    breakTimes.add(new BreakTime(System.currentTimeMillis(), event.pos));
+    if (event.newState.isAir()) {
+      if (!event.oldState.getFluidState().isEmpty())
+        return;
+      breakTimes.add(new BreakTime(System.currentTimeMillis(), event.pos));
+    } else {
+      breakTimes.removeIf(pair -> pair.pos.equals(event.pos));
+    }
   }
 
   @EventHandler
