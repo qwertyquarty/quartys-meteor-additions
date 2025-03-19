@@ -19,6 +19,12 @@ import net.minecraft.util.math.BlockPos;
 public class BreakRenderer extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
+  private final Setting<Boolean> removeOnPlace = sgGeneral.add(new BoolSetting.Builder()
+      .name("remove-on-place")
+      .description("Removes the box once a block is placed at that position.")
+      .defaultValue(true)
+      .build());
+
   private final Setting<Boolean> fadeShapes = sgGeneral.add(new BoolSetting.Builder()
       .name("fade-shapes")
       .description("Fade the shape alpha values or not.")
@@ -66,7 +72,7 @@ public class BreakRenderer extends Module {
       if (!event.oldState.getFluidState().isEmpty())
         return;
       breakTimes.add(new BreakTime(System.currentTimeMillis(), event.pos));
-    } else {
+    } else if (removeOnPlace.get()) {
       breakTimes.removeIf(pair -> pair.pos.equals(event.pos));
     }
   }
