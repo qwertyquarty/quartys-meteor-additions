@@ -52,6 +52,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new Sticker());
     Modules.get().add(new BreakRenderer());
     Modules.get().add(new TeleportCrash());
+    Modules.get().add(new MovementLimiter());
 
     // Commands
     Commands.add(new EntityTPCommand());
