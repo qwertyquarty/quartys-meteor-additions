@@ -15,7 +15,7 @@ public abstract class NoPitchLimitMixin {
   public float hookChangeLookDirection(float value, float min, float max) {
 
     if (Modules.get().get("no-pitch-limit").isActive()) {
-      return value;
+      return value % 360;
     }
     return MathHelper.clamp(value, min, max);
   }
