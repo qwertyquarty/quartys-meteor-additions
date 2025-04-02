@@ -3,8 +3,6 @@ package de.qwqu.qma.modules;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import de.qwqu.qma.Addon;
 import meteordevelopment.meteorclient.events.game.GameLeftEvent;
 import meteordevelopment.meteorclient.events.game.OpenScreenEvent;
@@ -33,6 +31,18 @@ public class SpamPlus extends Module {
       }
     }
     return stringBuilder.toString();
+  }
+
+  private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  private String randomAlphabetic(int length) {
+    Random rand = new Random();
+    StringBuilder builder = new StringBuilder(length);
+
+    for (int i = 0; i < length; i++) {
+      builder.append(ALPHABET.charAt(rand.nextInt(ALPHABET.length())));
+    }
+
+    return builder.toString();
   }
 
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -97,8 +107,6 @@ public class SpamPlus extends Module {
 
   private int splitNum;
 
-  private String text;
-
   public void onActivate() {
     timer = delay.get();
     messageI = 0;
@@ -124,7 +132,7 @@ public class SpamPlus extends Module {
         .name("split-length")
         .description("The length after which to split messages in chat")
         .visible(autoSplitMessages::get)
-        .defaultValue(Integer.valueOf(256))
+        .defaultValue(256)
         .min(1)
         .sliderMax(256)
         .build());
@@ -133,7 +141,7 @@ public class SpamPlus extends Module {
         .name("split-delay")
         .description("The delay between split messages in ticks.")
         .visible(autoSplitMessages::get)
-        .defaultValue(Integer.valueOf(20))
+        .defaultValue(20)
         .min(0)
         .sliderMax(200)
         .build());
@@ -154,7 +162,7 @@ public class SpamPlus extends Module {
         .name("length")
         .description("Number of characters used to bypass anti spam.")
         .visible(bypass::get)
-        .defaultValue(Integer.valueOf(16))
+        .defaultValue(16)
         .sliderRange(1, 256)
         .build());
 
@@ -200,7 +208,7 @@ public class SpamPlus extends Module {
       i = messageI++;
     }
 
-    text = messages.get().get(i);
+    String text = messages.get().get(i);
 
     if (minUnicodeRange.get() >= maxUnicodeRange.get()) {
       toggle();
@@ -212,8 +220,8 @@ public class SpamPlus extends Module {
       String bypass = unicode.get()
           ? generateRandomUnicodeString(length.get(), minUnicodeRange.get(), (maxUnicodeRange.get()))
           : (uppercase.get()
-              ? RandomStringUtils.randomAlphabetic(length.get())
-              : RandomStringUtils.randomAlphabetic(length.get()).toLowerCase());
+              ? randomAlphabetic(length.get())
+              : randomAlphabetic(length.get()).toLowerCase());
 
       text += " " + bypass;
     }

@@ -47,10 +47,8 @@ public class TeleportCrash extends Module {
 
   @EventHandler
   public void onSend(PacketEvent.Send event) {
-    if (!(event.packet instanceof PlayerMoveC2SPacket))
+    if (!(event.packet instanceof PlayerMoveC2SPacket packet))
       return;
-
-    final PlayerMoveC2SPacket packet = (PlayerMoveC2SPacket) event.packet;
 
     if (packet != this.packet) {
       event.cancel();
@@ -59,11 +57,11 @@ public class TeleportCrash extends Module {
 
   @Override
   public void onActivate() {
-    final Double x = useX.get() ? Double.NaN : 69;
-    final Double y = useY.get() ? Double.NaN : 420;
-    final Double z = useZ.get() ? Double.NaN : 1337;
+    final double x = useX.get() ? Double.NaN : 69;
+    final double y = useY.get() ? Double.NaN : 420;
+    final double z = useZ.get() ? Double.NaN : 1337;
 
-    packet = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, mc.player.isOnGround());
+    packet = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, mc.player.isOnGround(), mc.player.horizontalCollision);
 
     for (int i = 0; i < packets.get(); i++) {
       mc.getNetworkHandler().sendPacket(packet);
