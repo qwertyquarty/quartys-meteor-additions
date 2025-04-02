@@ -1,7 +1,6 @@
 name: Publish Build
 
 on:
-    push:
     workflow_dispatch:
 
 env:
