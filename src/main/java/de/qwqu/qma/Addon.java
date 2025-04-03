@@ -43,7 +43,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new Orbit());
     Modules.get().add(new NoCollision());
     Modules.get().add(new Elytra());
-    Modules.get().add(new NoPitchLimit());
+    //Modules.get().add(new NoPitchLimit());
     Modules.get().add(new SpamPlus());
     Modules.get().add(new MileyCyrus());
     Modules.get().add(new InteractAura());
