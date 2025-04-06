@@ -14,6 +14,8 @@ jobs:
           distribution: adopt
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Duplicate file for wget/cron access to auto update
+        run: cp ./build/libs/*.jar qma-latest.jar
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
