@@ -65,6 +65,7 @@ public class Addon extends MeteorAddon {
     Commands.add(new ElytraCommand());
     Commands.add(new VFillCommand());
     Commands.add(new WorldBorderCommand());
+    Commands.add(new InfoCommand());
 
     // Hud
     Hud.get().register(StickTarget.INFO);
