@@ -22,7 +22,8 @@
     "qma.mixins.json"
   ],
   "custom": {
-    "meteor-client:color": "225,25,25"
+    "meteor-client:color": "225,25,25",
+    "github:sha": "${gh_hash}"
   },
   "depends": {
     "java": ">=17",

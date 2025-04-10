@@ -11,6 +11,7 @@ import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
+import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 
 import net.minecraft.entity.Entity;
@@ -84,6 +85,17 @@ public class Addon extends MeteorAddon {
 
   @Override
   public GithubRepo getRepo() {
-    return new GithubRepo("qwertyquarty", "quartys-meteor-addditions");
+    return new GithubRepo("qwertyquarty", "quartys-meteor-additions", "main", null);
+  }
+
+  @Override
+  public String getCommit() {
+    String commit = FabricLoader
+            .getInstance()
+            .getModContainer("quartys-meteor-additions")
+            .get().getMetadata()
+            .getCustomValue("github:sha")
+            .getAsString();
+    return commit.isEmpty() ? null : commit.trim();
   }
 }

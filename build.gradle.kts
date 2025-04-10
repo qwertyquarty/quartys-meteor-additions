@@ -34,6 +34,7 @@ tasks {
         val propertyMap = mapOf(
             "version" to project.version,
             "mc_version" to project.property("minecraft_version"),
+            "gh_hash" to (System.getenv("GITHUB_SHA") ?: "")
         )
 
         filesMatching("fabric.mod.json") {
