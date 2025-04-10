@@ -1,4 +1,4 @@
-name: Publish Development Build
+name: Publish Build
 on: push
 
 jobs:
@@ -14,14 +14,12 @@ jobs:
           distribution: adopt
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Duplicate artifact file for easy wget/cron access to auto update
-        run: cp ./build/libs/*.jar ./build/libs/qma-latest.jar
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           automatic_release_tag: latest
-          prerelease: true
-          title: Dev Build
+          prerelease: false
+          title: Latest Build
           files: |
             ./build/libs/*.jar
