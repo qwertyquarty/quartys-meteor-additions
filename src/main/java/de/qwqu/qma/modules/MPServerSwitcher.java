@@ -37,7 +37,7 @@ public class MPServerSwitcher extends Module {
   }
 
   private static final String BRAND = "Mineplay-Lobby (Velocity)";
-  private static final Pattern PATTERN = Pattern.compile("^⇄ Servers ┃ Connecting you to mineplay-(\\d+)|^You are currently connected to mineplay-(\\d+)");
+  private static final Pattern PATTERN = Pattern.compile("⇄ Servers ┃ Connecting you to mineplay-(\\d+)|You are currently connected to mineplay-(\\d+)");
 
   private boolean msgSent = false;
 
