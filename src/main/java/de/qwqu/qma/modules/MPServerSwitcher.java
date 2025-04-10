@@ -28,6 +28,12 @@ public class MPServerSwitcher extends Module {
           .defaultValue(true)
           .build());
 
+  private final Setting<Boolean> preservePosition = sgGeneral.add(new BoolSetting.Builder()
+          .name("preserve-position")
+          .description("Preserves your position when joining.")
+          .defaultValue(true)
+          .build());
+
   private final Setting<String> targetServer = sgGeneral.add(new StringSetting.Builder()
           .name("target-server")
           .description("The server to teleport to when when spawning in.")
@@ -74,6 +80,8 @@ public class MPServerSwitcher extends Module {
   private void onTick(TickEvent.Post event) {
     inLobby = mc.getNetworkHandler().getBrand().equals(BRAND);
     if (inLobby) return;
+
+    if (! preservePosition.get()) return;
 
     if (mc.player.getPos().equals(lastPos) || teleported) {
       teleported = true;
