@@ -4,6 +4,7 @@ import de.qwqu.qma.Addon;
 import meteordevelopment.meteorclient.events.game.GameLeftEvent;
 import meteordevelopment.meteorclient.events.game.ReceiveMessageEvent;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
+import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
+import net.minecraft.util.math.Vec3d;
 
 public class MPServerSwitcher extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -40,6 +42,11 @@ public class MPServerSwitcher extends Module {
   private static final Pattern PATTERN = Pattern.compile(".*⇄ Servers ┃ Connecting you to mineplay-(\\d+).*|.*You are currently connected to mineplay-(\\d+).*");
 
   private boolean msgSent = false;
+  public boolean inLobby = false;
+  private boolean teleported = false;
+  private Vec3d lastPos = new Vec3d(0, 0, 0);
+  private float lastYaw = 0;
+  private float lastPitch = 0;
 
   private void onDisable() {
     msgSent = false;
@@ -54,12 +61,32 @@ public class MPServerSwitcher extends Module {
   private void onPacket(PacketEvent.Receive event) {
     if (msgSent) return;
     if (!(event.packet instanceof ChunkDataS2CPacket)) return;
-    Addon.LOG.info(event.packet.toString());
-    if (!mc.getNetworkHandler().getBrand().equals(BRAND)) return;
+    if (! inLobby) return;
 
     ChatUtils.sendPlayerMsg("/server mineplay-" + targetServer.get());
 
     msgSent = true;
+    inLobby = false;
+    teleported = false;
+  }
+
+  @EventHandler
+  private void onTick(TickEvent.Post event) {
+    inLobby = mc.getNetworkHandler().getBrand().equals(BRAND);
+    if (inLobby) return;
+
+    if (mc.player.getPos().equals(lastPos) || teleported) {
+      teleported = true;
+    } else {
+      mc.player.setPosition(lastPos);
+      mc.player.setYaw(lastYaw);
+      mc.player.setPitch(lastPitch);
+      return;
+    }
+
+    lastPos = mc.player.getPos();
+    lastYaw = mc.player.getYaw();
+    lastPitch = mc.player.getPitch();
   }
 
   @EventHandler
