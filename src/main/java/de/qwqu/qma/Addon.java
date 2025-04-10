@@ -55,6 +55,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new TeleportCrash());
     Modules.get().add(new MovementLimiter());
     Modules.get().add(new MPServerSwitcher());
+    Modules.get().add(new AntiServerTP());
 
     // Commands
     Commands.add(new EntityTPCommand());
