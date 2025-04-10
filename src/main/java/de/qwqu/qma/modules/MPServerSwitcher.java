@@ -78,6 +78,7 @@ public class MPServerSwitcher extends Module {
     if (mc.player.getPos().equals(lastPos) || teleported) {
       teleported = true;
     } else {
+      mc.player.setVelocity(0, 0, 0);
       mc.player.setPosition(lastPos);
       mc.player.setYaw(lastYaw);
       mc.player.setPitch(lastPitch);
