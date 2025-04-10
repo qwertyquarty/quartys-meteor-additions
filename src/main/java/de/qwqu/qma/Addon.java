@@ -85,7 +85,7 @@ public class Addon extends MeteorAddon {
 
   @Override
   public GithubRepo getRepo() {
-    return new GithubRepo("qwertyquarty", "quartys-meteor-additions", "main");
+    return new GithubRepo("qwertyquarty", "quartys-meteor-additions", "main", null);
   }
 
   @Override
