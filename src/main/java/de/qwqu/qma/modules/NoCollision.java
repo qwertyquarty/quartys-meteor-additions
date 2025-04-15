@@ -1,18 +1,15 @@
 package de.qwqu.qma.modules;
 
-import java.util.List;
-
 import de.qwqu.qma.Addon;
 import meteordevelopment.meteorclient.events.world.CollisionShapeEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.settings.BlockListSetting;
-import meteordevelopment.meteorclient.settings.BoolSetting;
-import meteordevelopment.meteorclient.settings.EnumSetting;
-import meteordevelopment.meteorclient.settings.Setting;
-import meteordevelopment.meteorclient.settings.SettingGroup;
+import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.shape.VoxelShapes;

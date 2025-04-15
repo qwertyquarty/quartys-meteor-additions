@@ -1,9 +1,9 @@
 package de.qwqu.qma.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import de.qwqu.qma.arguments.ClientPosArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;

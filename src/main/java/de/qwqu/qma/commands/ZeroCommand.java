@@ -1,8 +1,8 @@
 package de.qwqu.qma.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import meteordevelopment.meteorclient.commands.Command;
+
 import net.minecraft.command.CommandSource;
 
 public class ZeroCommand extends Command {

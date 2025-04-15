@@ -14,7 +14,7 @@ public class MileyCyrus extends Module {
   private final Setting<Integer> delay = this.sgGeneral.add(new IntSetting.Builder()
       .name("delay")
       .description("The delay between each twerk in ticks.")
-      .defaultValue(Integer.valueOf(20))
+      .defaultValue(20)
       .min(0)
       .sliderMax(100)
       .build());

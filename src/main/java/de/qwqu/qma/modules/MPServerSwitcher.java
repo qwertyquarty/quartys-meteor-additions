@@ -81,7 +81,7 @@ public class MPServerSwitcher extends Module {
     inLobby = mc.getNetworkHandler().getBrand().equals(BRAND);
     if (inLobby) return;
 
-    if (! preservePosition.get()) return;
+    if (!preservePosition.get()) return;
 
     if (mc.player.getPos().equals(lastPos) || teleported) {
       teleported = true;

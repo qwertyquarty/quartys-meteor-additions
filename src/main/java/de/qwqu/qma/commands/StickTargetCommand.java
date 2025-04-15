@@ -1,11 +1,11 @@
 package de.qwqu.qma.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import de.qwqu.qma.Addon;
 import de.qwqu.qma.Util;
 import de.qwqu.qma.arguments.PlayerNameOrArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
+
 import net.minecraft.command.CommandSource;
 
 public class StickTargetCommand extends Command {

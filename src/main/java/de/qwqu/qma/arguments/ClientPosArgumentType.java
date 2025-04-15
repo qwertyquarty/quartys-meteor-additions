@@ -6,15 +6,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.CoordinateArgument;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
 
 // from meteor rejects
 public class ClientPosArgumentType implements ArgumentType<Vec3d> {

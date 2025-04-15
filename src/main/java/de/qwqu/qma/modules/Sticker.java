@@ -1,8 +1,5 @@
 package de.qwqu.qma.modules;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.qwqu.qma.Addon;
 import de.qwqu.qma.Util;
 import meteordevelopment.meteorclient.events.world.TickEvent;
@@ -12,6 +9,10 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.settings.StringListSetting;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 
 public class Sticker extends Module {

@@ -2,8 +2,8 @@ package de.qwqu.qma.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import meteordevelopment.meteorclient.commands.Command;
+
 import net.minecraft.command.CommandSource;
 
 public class InfoCommand extends Command {

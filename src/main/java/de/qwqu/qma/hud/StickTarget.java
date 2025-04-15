@@ -6,6 +6,8 @@ import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 
+import java.util.Objects;
+
 public class StickTarget extends HudElement {
   public static final HudElementInfo<StickTarget> INFO = new HudElementInfo<>(Addon.HUD_GROUP, "stick-target",
       "Displays the stick target.", StickTarget::new);
@@ -22,7 +24,7 @@ public class StickTarget extends HudElement {
       return;
     }
 
-    if (Addon.stick_targetName == "")
+    if (Objects.equals(Addon.stick_targetName, ""))
       return;
 
     String displayText = "Target: " + Addon.stick_targetName;

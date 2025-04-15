@@ -1,13 +1,14 @@
 package de.qwqu.qma;
 
-import static meteordevelopment.meteorclient.MeteorClient.mc;
-
-import java.util.List;
-
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.systems.modules.Modules;
+
+import java.util.List;
+
 import net.minecraft.entity.Entity;
+
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class Util {
   @SuppressWarnings("unchecked")
