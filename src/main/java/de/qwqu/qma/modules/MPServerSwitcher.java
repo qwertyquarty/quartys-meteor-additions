@@ -44,6 +44,11 @@ public class MPServerSwitcher extends Module {
     super(Addon.CATEGORY, "MPServerSwitcher", "Automatically switches the server. (for mc.mineplay.nl)");
   }
 
+  @Override
+  public String getInfoString() {
+    return targetServer.get();
+  }
+
   private static final String BRAND = "Mineplay-Lobby (Velocity)";
   private static final Pattern PATTERN = Pattern.compile(".*⇄ Servers ┃ Connecting you to mineplay-(\\d+).*|.*You are currently connected to mineplay-(\\d+).*");
 
