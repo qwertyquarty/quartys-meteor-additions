@@ -13,9 +13,6 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.orbit.EventHandler;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.util.math.Vec3d;
 
@@ -50,7 +47,6 @@ public class MPServerSwitcher extends Module {
   }
 
   private static final String BRAND = "Mineplay-Lobby (Velocity)";
-  private static final Pattern PATTERN = Pattern.compile(".*⇄ Servers ┃ Connecting you to mineplay-(\\d+).*|.*You are currently connected to mineplay-(\\d+).*");
 
   private boolean msgSent = false;
   public boolean inLobby = false;
@@ -109,11 +105,12 @@ public class MPServerSwitcher extends Module {
 
     String message = event.getMessage().getString();
 
-    Matcher matcher = PATTERN.matcher(message);
-    if (!matcher.find()) return;
+    if (message.startsWith("[")) return;
+    if (!message.contains("to mineplay-")) return;
 
-    String server = matcher.group(1);
+    String server = message.split("mineplay-")[1];
+    server = server.replaceAll("[^0-9]", "");
 
-    if (server != null) targetServer.set(server);
+    targetServer.set(server);
   }
 }
