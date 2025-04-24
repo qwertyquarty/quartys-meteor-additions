@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "quartys-meteor-additions",
   "version": "${version}",
-  "name": "Quarty's meteor additions",
+  "name": "Quarty's Meteor Additions",
   "description": "Meteor addon with useful stuff.",
   "authors": [
     "qwertyquarty",
