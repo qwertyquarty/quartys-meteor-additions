@@ -1,9 +1,10 @@
 package de.qwqu.qma;
 
-import com.mojang.logging.LogUtils;
 import de.qwqu.qma.commands.*;
 import de.qwqu.qma.hud.StickTarget;
 import de.qwqu.qma.modules.*;
+import net.fabricmc.loader.api.FabricLoader;
+
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
@@ -11,10 +12,11 @@ import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
-import net.fabricmc.loader.api.FabricLoader;
-import org.slf4j.Logger;
 
 import net.minecraft.entity.Entity;
+
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 public class Addon extends MeteorAddon {
   public static final Logger LOG = LogUtils.getLogger();
@@ -57,6 +59,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new MPServerSwitcher());
     Modules.get().add(new AntiServerTP());
     Modules.get().add(new SignLogger());
+    Modules.get().add(new OffGround());
 
     // Commands
     Commands.add(new EntityTPCommand());
