@@ -3,7 +3,8 @@
   "package": "de.qwqu.qma.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    //"NoPitchLimitMixin"
+    "CameraMixin",
+    "NoPitchLimitMixin"
   ],
   "injectors": {
     "defaultRequire": 1

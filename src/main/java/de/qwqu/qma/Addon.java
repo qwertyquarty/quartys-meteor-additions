@@ -46,7 +46,6 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new Orbit());
     Modules.get().add(new NoCollision());
     Modules.get().add(new Elytra());
-    //Modules.get().add(new NoPitchLimit());
     Modules.get().add(new SpamPlus());
     Modules.get().add(new MileyCyrus());
     Modules.get().add(new InteractAura());
@@ -60,6 +59,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new AntiServerTP());
     Modules.get().add(new SignLogger());
     Modules.get().add(new OffGround());
+    Modules.get().add(new CameraUtils());
 
     // Commands
     Commands.add(new EntityTPCommand());
