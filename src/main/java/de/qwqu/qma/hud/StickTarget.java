@@ -14,10 +14,16 @@ import java.util.Objects;
 
 public class StickTarget extends HudElement {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
-  private final Setting<SettingColor> textColor = sgGeneral.add(new ColorSetting.Builder()
-    .name("text-color")
-    .description("Text Color.")
+  private final Setting<SettingColor> primaryColor = sgGeneral.add(new ColorSetting.Builder()
+    .name("primary-color")
+    .description("Primary Color.")
     .defaultValue(new SettingColor())
+    .build()
+  );
+  private final Setting<SettingColor> secondaryColor = sgGeneral.add(new ColorSetting.Builder()
+    .name("secondary-color")
+    .description("Secondary Color.")
+    .defaultValue(new SettingColor(175, 175, 175))
     .build()
   );
   private final Setting<Boolean> alwaysRender = sgGeneral.add(new BoolSetting.Builder()
@@ -36,7 +42,8 @@ public class StickTarget extends HudElement {
   @Override
   public void render(HudRenderer renderer) {
     if (isInEditor()) {
-      renderer.text("Target: qwertyquarty", x, y, textColor.get(), true);
+      double x = renderer.text("Target: ", this.x, y, primaryColor.get(), true);
+      renderer.text("qwertyquarty", x, y, secondaryColor.get(), true);
       setSize(renderer.textWidth("Target: qwertyquarty", true), renderer.textHeight(true));
       return;
     }
@@ -46,7 +53,7 @@ public class StickTarget extends HudElement {
 
     String displayText = "Target: " + Addon.stick_targetName;
     setSize(renderer.textWidth(displayText, true), renderer.textHeight(true));
-    renderer.text(displayText, x, y, textColor.get(), true);
-
+    double x = renderer.text("Target: ", this.x, y, primaryColor.get(), true);
+    renderer.text(Addon.stick_targetName, x, y, secondaryColor.get(), true);
   }
 }
