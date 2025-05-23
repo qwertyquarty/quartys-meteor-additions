@@ -1,9 +1,11 @@
 package de.qwqu.qma;
 
-import de.qwqu.qma.commands.*;
-import de.qwqu.qma.hud.StickTarget;
-import de.qwqu.qma.modules.*;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
+
+import net.minecraft.entity.Entity;
+
+import com.mojang.logging.LogUtils;
 
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
@@ -13,10 +15,9 @@ import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 
-import net.minecraft.entity.Entity;
-
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
+import de.qwqu.qma.commands.*;
+import de.qwqu.qma.hud.StickTarget;
+import de.qwqu.qma.modules.*;
 
 public class Addon extends MeteorAddon {
   public static final Logger LOG = LogUtils.getLogger();
@@ -60,6 +61,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new SignLogger());
     Modules.get().add(new OffGround());
     Modules.get().add(new CameraUtils());
+    Modules.get().add(new AutoCross());
 
     // Commands
     Commands.add(new EntityTPCommand());
