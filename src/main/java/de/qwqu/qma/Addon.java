@@ -63,6 +63,7 @@ public class Addon extends MeteorAddon {
     Modules.get().add(new CameraUtils());
     Modules.get().add(new AutoCross());
     Modules.get().add(new NoScreen());
+    Modules.get().add(new FarSighted());
 
     // Commands
     Commands.add(new EntityTPCommand());
