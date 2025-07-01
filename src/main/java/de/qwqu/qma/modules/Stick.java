@@ -193,7 +193,7 @@ public class Stick extends Module {
 
   @Override
   public void onDeactivate() {
-    mc.player.getAbilities().flying = false;
+      if (stopFlying.get()) mc.player.getAbilities().flying = false;
   }
 
   public void setTarget() {
