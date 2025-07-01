@@ -88,6 +88,11 @@ public class Stick extends Module {
       .sliderMax(10)
       .visible(enableSine::get)
       .build());
+  private final Setting<Boolean> stopFlying = sgGeneral.add(new BoolSetting.Builder()
+      .name("stop-flying")
+      .description("Stops flying when no target is set.")
+      .defaultValue(false)
+      .build());
 
   @SuppressWarnings("unused")
   private final Setting<Boolean> syncSticker = sgGeneral.add(new BoolSetting.Builder()
@@ -129,7 +134,7 @@ public class Stick extends Module {
       } else {
         Addon.stick_targetName = "";
         Addon.stick_targetEntity = null;
-        mc.player.getAbilities().flying = false;
+        if (stopFlying.get()) mc.player.getAbilities().flying = false;
       }
 
     }
@@ -188,7 +193,7 @@ public class Stick extends Module {
 
   @Override
   public void onDeactivate() {
-    mc.player.getAbilities().flying = false;
+      if (stopFlying.get()) mc.player.getAbilities().flying = false;
   }
 
   public void setTarget() {
