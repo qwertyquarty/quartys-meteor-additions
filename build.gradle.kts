@@ -1,5 +1,6 @@
 plugins {
     id("fabric-loom") version "1.9-SNAPSHOT"
+    id("io.freefair.lombok") version "8.4"
 }
 
 base {
