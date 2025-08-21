@@ -14,12 +14,14 @@ jobs:
           distribution: adopt
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Get Version
+        run: grep minecraft_version gradle.properties >> $GITHUB_ENV
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: latest
+          automatic_release_tag: latest-${{ env.minecraft_version }}
           prerelease: false
-          title: Latest Build
+          title: Latest Build for ${{ env.minecraft_version }}
           files: |
             ./build/libs/*.jar
