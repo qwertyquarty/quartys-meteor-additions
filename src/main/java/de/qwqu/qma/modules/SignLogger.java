@@ -10,6 +10,7 @@ import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -35,15 +36,21 @@ public class SignLogger extends Module {
     Vec3d pos = pkt.getPos().toCenterPos().subtract(0, .5, 0);
     NbtCompound nbt = pkt.getNbt();
 
-    NbtCompound frontText = nbt.getCompound("front_text");
-    NbtCompound backText = nbt.getCompound("back_text");
+    Optional<NbtCompound> oFrontText = nbt.getCompound("front_text");
+    Optional<NbtCompound> oBackText = nbt.getCompound("back_text");
 
-    if (frontText == null || backText == null) return;
+    if (oFrontText.isEmpty() || oBackText.isEmpty()) return;
 
-    NbtList frontMessages = frontText.getList("messages", NbtElement.STRING_TYPE);
-    NbtList backMessages = backText.getList("messages", NbtElement.STRING_TYPE);
+    NbtCompound frontText = oFrontText.get();
+    NbtCompound backText = oBackText.get();
 
-    if (frontMessages == null || backMessages == null) return;
+    Optional<NbtList> oFrontMessages = frontText.getList("messages");
+    Optional<NbtList> oBackMessages = backText.getList("messages");
+
+    if (oFrontMessages.isEmpty() || oBackMessages.isEmpty()) return;
+
+    NbtList frontMessages = oFrontMessages.get();
+    NbtList backMessages = oBackMessages.get();
 
     int frontSum = 0;
     int backSum = 0;
@@ -53,7 +60,10 @@ public class SignLogger extends Module {
 
     int i = 1;
     for (NbtElement t : frontMessages) {
-      String message = t.asString();
+      Optional<String> msg = t.asString();
+      if (msg.isEmpty()) continue;
+      String message = msg.get();
+
       if (message.length() <= 1) continue;
 
       message = message.substring(1, message.length() - 1);
@@ -65,7 +75,10 @@ public class SignLogger extends Module {
 
     i = 1;
     for (NbtElement t : backMessages) {
-      String message = t.asString();
+      Optional<String> msg = t.asString();
+      if (msg.isEmpty()) continue;
+      String message = msg.get();
+
       if (message.length() <= 1) continue;
 
       message = message.substring(1, message.length() - 1);

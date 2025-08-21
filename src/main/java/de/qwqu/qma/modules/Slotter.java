@@ -36,18 +36,18 @@ public class Slotter extends Module {
 
   private void ChangeSlot() {
     PlayerInventory inv = mc.player.getInventory();
-    int currSlot = inv.selectedSlot;
-    int newSlot = currSlot;
+
+    int slot = inv.getSelectedSlot();
 
     if (reverse.get()) {
-      newSlot += 8;
+      slot += 8;
     } else {
-      newSlot++;
+      slot++;
     }
 
-    newSlot %= 9;
+    slot %= 9;
 
-    inv.selectedSlot = newSlot;
+    inv.setSelectedSlot(slot);
   }
 
   @EventHandler
