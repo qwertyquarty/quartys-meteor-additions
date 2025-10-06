@@ -90,17 +90,17 @@ public class SignLogger extends Module {
 
     if (frontSum + backSum == 0) return;
 
-    info("┌─ sign @ %s %s %s (%sm)", (int)(pos.getX() - .5), (int)pos.getY(), (int)(pos.getZ() - .5), String.format("%.2f", pos.distanceTo(mc.player.getPos())));
+    mc.execute(()->info("┌─ sign @ %s %s %s (%sm)", (int)(pos.getX() - .5), (int)pos.getY(), (int)(pos.getZ() - .5), String.format("%.2f", pos.distanceTo(mc.player.getPos()))));
 
     if (frontSum > 0) {
       for (Pair<Integer, String> pair : frontList) {
-        info("│ %s %s", pair.getLeft(), pair.getRight());
+        mc.execute(()->info("│ %s %s", pair.getLeft(), pair.getRight()));
       }
     }
     if (backSum > 0) {
       if (frontSum > 0) info("├─");
       for (Pair<Integer, String> pair : backList) {
-        info("│ %s %s", pair.getLeft(), pair.getRight());
+        mc.execute(()->info("│ %s %s", pair.getLeft(), pair.getRight()));
       }
     }
 
@@ -118,7 +118,10 @@ public class SignLogger extends Module {
 
       if (closestPlr == null) return;
 
-      info("└─ by %s (%sm)", closestPlr.getName().getString(), String.format("%.2f", closestDist));
+      double finalClosestDist = closestDist;
+      PlayerEntity finalClosestPlr = closestPlr;
+
+      mc.execute(()->info("└─ by %s (%sm)", finalClosestPlr.getName().getString(), String.format("%.2f", finalClosestDist)));
     }
   }
 }
