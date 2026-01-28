@@ -36,7 +36,7 @@ public class PlayerNameOrArgumentType implements ArgumentType<String> {
   @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
     return CommandSource.suggestMatching(
-        mc.getNetworkHandler().getPlayerList().stream().map(playerListEntry -> playerListEntry.getProfile().getName()),
+        mc.getNetworkHandler().getPlayerList().stream().map(playerListEntry -> playerListEntry.getProfile().name()),
         builder);
   }
 }

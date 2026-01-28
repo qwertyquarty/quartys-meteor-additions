@@ -2,7 +2,7 @@ package de.qwqu.qma.modules;
 
 import de.qwqu.qma.Addon;
 import de.qwqu.qma.Util;
-import meteordevelopment.meteorclient.events.meteor.MouseButtonEvent;
+import meteordevelopment.meteorclient.events.meteor.MouseClickEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
@@ -109,7 +109,7 @@ public class Stick extends Module {
   private double time = 0;
 
   private boolean entityCheck(Entity entity) {
-    if (entity.equals(mc.player) || entity.equals(mc.cameraEntity))
+    if (entity.equals(mc.player) || entity.equals(mc.getCameraEntity()))
       return false;
     if ((entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) || !entity.isAlive())
       return false;
@@ -121,8 +121,8 @@ public class Stick extends Module {
   }
 
   @EventHandler
-  private void onMouseButton(MouseButtonEvent event) {
-    if (event.action == KeyAction.Press && event.button == GLFW_MOUSE_BUTTON_MIDDLE
+  private void onMouseButton(MouseClickEvent event) {
+    if (event.action == KeyAction.Press && event.button() == GLFW_MOUSE_BUTTON_MIDDLE
         && mc.currentScreen == null) {
       if (mc.targetedEntity instanceof PlayerEntity player) {
         Addon.stick_targetName = player.getName().getString();

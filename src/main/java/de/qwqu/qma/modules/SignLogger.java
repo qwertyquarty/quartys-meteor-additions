@@ -90,7 +90,7 @@ public class SignLogger extends Module {
 
     if (frontSum + backSum == 0) return;
 
-    mc.execute(()->info("┌─ sign @ %s %s %s (%sm)", (int)(pos.getX() - .5), (int)pos.getY(), (int)(pos.getZ() - .5), String.format("%.2f", pos.distanceTo(mc.player.getPos()))));
+    mc.execute(()->info("┌─ sign @ %s %s %s (%sm)", (int)(pos.getX() - .5), (int)pos.getY(), (int)(pos.getZ() - .5), String.format("%.2f", pos.distanceTo(mc.player.getEntityPos()))));
 
     if (frontSum > 0) {
       for (Pair<Integer, String> pair : frontList) {
@@ -109,7 +109,7 @@ public class SignLogger extends Module {
       PlayerEntity closestPlr = null;
 
       for (PlayerEntity plr : mc.world.getPlayers()) {
-        double dist = pos.distanceTo(plr.getPos());
+        double dist = pos.distanceTo(plr.getEntityPos());
         if (dist < closestDist) {
           closestPlr = plr;
           closestDist = dist;

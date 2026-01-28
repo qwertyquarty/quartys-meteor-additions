@@ -84,7 +84,7 @@ public class MPServerSwitcher extends Module {
 
     if (!preservePosition.get()) return;
 
-    if (mc.player.getPos().equals(lastPos) || teleported) {
+    if (mc.player.getEntityPos().equals(lastPos) || teleported) {
       teleported = true;
     } else {
       mc.player.setVelocity(0, 0, 0);
@@ -94,7 +94,7 @@ public class MPServerSwitcher extends Module {
       return;
     }
 
-    lastPos = mc.player.getPos();
+    lastPos = mc.player.getEntityPos();
     lastYaw = mc.player.getYaw();
     lastPitch = mc.player.getPitch();
   }
