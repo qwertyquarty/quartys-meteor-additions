@@ -5,12 +5,15 @@ import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
+import meteordevelopment.meteorclient.settings.StringSetting;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -23,7 +26,16 @@ import net.minecraft.util.math.Vec3d;
 public class SignLogger extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-  private final Setting<Boolean> logClosest = sgGeneral.add(new BoolSetting.Builder().name("log-closest-player").description("Logs the closest player (might be the sign author).").defaultValue(true).build());
+  private final Setting<Boolean> logClosest = sgGeneral.add(new BoolSetting.Builder()
+    .name("log-closest-player")
+    .description("Logs the closest player (might be the sign author).")
+    .defaultValue(true)
+    .build());
+  private final Setting<String> ignoreRegex = sgGeneral.add(new StringSetting.Builder()
+    .name("ignore-regex")
+    .description("Ignore sign lines matching this regex. Leave empty to disable.")
+    .defaultValue("")
+    .build());
 
   public SignLogger() {
     super(Addon.CATEGORY, "sign-logger", "Logs sign texts.");
@@ -36,21 +48,11 @@ public class SignLogger extends Module {
     Vec3d pos = pkt.getPos().toCenterPos().subtract(0, .5, 0);
     NbtCompound nbt = pkt.getNbt();
 
-    Optional<NbtCompound> oFrontText = nbt.getCompound("front_text");
-    Optional<NbtCompound> oBackText = nbt.getCompound("back_text");
+    NbtCompound frontText = nbt.getCompound("front_text").get();
+    NbtCompound backText = nbt.getCompound("back_text").get();
 
-    if (oFrontText.isEmpty() || oBackText.isEmpty()) return;
-
-    NbtCompound frontText = oFrontText.get();
-    NbtCompound backText = oBackText.get();
-
-    Optional<NbtList> oFrontMessages = frontText.getList("messages");
-    Optional<NbtList> oBackMessages = backText.getList("messages");
-
-    if (oFrontMessages.isEmpty() || oBackMessages.isEmpty()) return;
-
-    NbtList frontMessages = oFrontMessages.get();
-    NbtList backMessages = oBackMessages.get();
+    Optional<NbtList> frontMessages = Optional.of(frontText.getList("messages").get());
+    Optional<NbtList> backMessages = Optional.of(backText.getList("messages").get());
 
     int frontSum = 0;
     int backSum = 0;
@@ -58,49 +60,67 @@ public class SignLogger extends Module {
     ArrayList<Pair<Integer, String>> frontList = new ArrayList<>();
     ArrayList<Pair<Integer, String>> backList = new ArrayList<>();
 
+    String regex = ignoreRegex.get().trim();
+    Pattern ignorePattern = null;
+    if (!regex.isEmpty()) {
+      try {
+        ignorePattern = Pattern.compile(regex);
+      } catch (PatternSyntaxException e) {
+        e.printStackTrace();
+        error("an error occured parsing the regular expression");
+        return;
+      }
+    }
+
     int i = 1;
-    for (NbtElement t : frontMessages) {
-      Optional<String> msg = t.asString();
-      if (msg.isEmpty()) continue;
-      String message = msg.get();
+    for (NbtElement t : frontMessages.get()) {
+      Optional<String> optJson = t.asString();
+      if (optJson.isEmpty()) continue;
 
-      if (message.length() <= 1) continue;
+      String message = optJson.get();
 
-      message = message.substring(1, message.length() - 1);
+      if (message.isEmpty()) continue;
+
+      if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       frontSum += message.length();
-
       frontList.add(new Pair<>(i++, message));
     }
 
     i = 1;
-    for (NbtElement t : backMessages) {
-      Optional<String> msg = t.asString();
-      if (msg.isEmpty()) continue;
-      String message = msg.get();
+    for (NbtElement t : backMessages.get()) {
+      Optional<String> optJson = t.asString();
+      if (optJson.isEmpty()) continue;
 
-      if (message.length() <= 1) continue;
+      String message = optJson.get();
 
-      message = message.substring(1, message.length() - 1);
+      if (message.isEmpty()) continue;
+
+      if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       backSum += message.length();
-
       backList.add(new Pair<>(i++, message));
     }
 
     if (frontSum + backSum == 0) return;
 
-    mc.execute(()->info("┌─ sign @ %s %s %s (%sm)", (int)(pos.getX() - .5), (int)pos.getY(), (int)(pos.getZ() - .5), String.format("%.2f", pos.distanceTo(mc.player.getEntityPos()))));
+    mc.execute(() -> info(
+      "┌─ sign @ %s %s %s (%sm)",
+      (int) (pos.getX() - .5),
+      (int) pos.getY(),
+      (int) (pos.getZ() - .5),
+      String.format("%.2f", pos.distanceTo(mc.player.getEntityPos()))
+    ));
 
     if (frontSum > 0) {
       for (Pair<Integer, String> pair : frontList) {
-        mc.execute(()->info("│ %s %s", pair.getLeft(), pair.getRight()));
+        mc.execute(() -> info("│ %s %s", pair.getLeft(), pair.getRight()));
       }
     }
     if (backSum > 0) {
       if (frontSum > 0) info("├─");
       for (Pair<Integer, String> pair : backList) {
-        mc.execute(()->info("│ %s %s", pair.getLeft(), pair.getRight()));
+        mc.execute(() -> info("│ %s %s", pair.getLeft(), pair.getRight()));
       }
     }
 
@@ -121,7 +141,11 @@ public class SignLogger extends Module {
       double finalClosestDist = closestDist;
       PlayerEntity finalClosestPlr = closestPlr;
 
-      mc.execute(()->info("└─ by %s (%sm)", finalClosestPlr.getName().getString(), String.format("%.2f", finalClosestDist)));
+      mc.execute(() -> info(
+        "└─ by %s (%sm)",
+        finalClosestPlr.getName().getString(),
+        String.format("%.2f", finalClosestDist)
+      ));
     }
   }
 }
