@@ -82,7 +82,6 @@ public class SignLogger extends Module {
     for (NbtElement t : frontMessages) {
       Text text = Text.Serialization.fromJson(t.asString(), registries);
       String message = text.getString();
-      if (message.length() <= 1) continue;
 
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
@@ -95,7 +94,6 @@ public class SignLogger extends Module {
     for (NbtElement t : backMessages) {
       Text text = Text.Serialization.fromJson(t.asString(), registries);
       String message = text.getString();
-      if (message.length() <= 1) continue;
 
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
