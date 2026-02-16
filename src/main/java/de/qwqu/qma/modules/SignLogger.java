@@ -20,7 +20,9 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.Vec3d;
 
@@ -104,12 +106,27 @@ public class SignLogger extends Module {
 
     if (frontSum + backSum == 0) return;
 
+    int x = (int) (pos.getX() - 0.5);
+    int y = (int) pos.getY();
+    int z = (int) (pos.getZ() - 0.5);
+
+    Text coords = Text.literal(String.format("%d %d %d", x, y, z))
+                      .styled(style -> style
+                        .withClickEvent(new ClickEvent(
+                          ClickEvent.Action.SUGGEST_COMMAND,
+                          ".tp " + x + " " + y + " " + z
+                        ))
+                      );
+
     mc.execute(() -> info(
-      "┌─ sign @ %s %s %s (%sm)",
-      (int) (pos.getX() - .5),
-      (int) pos.getY(),
-      (int) (pos.getZ() - .5),
-      String.format("%.2f", pos.distanceTo(mc.player.getPos()))
+      Text.literal("┌─ sign ")
+          .styled(style -> style.withColor(Formatting.GRAY))
+          .append(Text.literal("@ "))
+          .append(coords)
+          .append(String.format(
+            " (%.2fm)",
+            pos.distanceTo(mc.player.getPos())
+          ))
     ));
 
     if (frontSum > 0) {
