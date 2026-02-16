@@ -66,7 +66,6 @@ public class SignLogger extends Module {
     ArrayList<Pair<Integer, String>> frontList = new ArrayList<>();
     ArrayList<Pair<Integer, String>> backList = new ArrayList<>();
 
-    RegistryWrapper.WrapperLookup registries = mc.world.getRegistryManager();
     String regex = ignoreRegex.get().trim();
     Pattern ignorePattern = null;
     if (!regex.isEmpty()) {
