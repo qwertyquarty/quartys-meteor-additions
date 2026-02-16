@@ -79,8 +79,6 @@ public class SignLogger extends Module {
 
       String message = optJson.get();
 
-      if (message.isEmpty()) continue;
-
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       frontSum += message.length();
@@ -93,8 +91,6 @@ public class SignLogger extends Module {
       if (optJson.isEmpty()) continue;
 
       String message = optJson.get();
-
-      if (message.isEmpty()) continue;
 
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
