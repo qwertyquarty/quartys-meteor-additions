@@ -110,10 +110,7 @@ public class SignLogger extends Module {
 
     Text coords = Text.literal(String.format("%d %d %d", x, y, z))
                       .styled(style -> style
-                        .withClickEvent(new ClickEvent(
-                          ClickEvent.Action.SUGGEST_COMMAND,
-                          ".tp " + x + " " + y + " " + z
-                        ))
+                        .withClickEvent(new ClickEvent.SuggestCommand(".tp " + x + " " + y + " " + z))
                       );
 
     mc.execute(() -> info(
