@@ -42,6 +42,6 @@ public class OffGround extends Module {
     if (!(event.packet instanceof PlayerMoveC2SPacket pkt))
       return;
 
-    ((PlayerMoveC2SPacketAccessor) pkt).setOnGround(false);
+    ((PlayerMoveC2SPacketAccessor) pkt).meteor$setOnGround(false);
   }
 }

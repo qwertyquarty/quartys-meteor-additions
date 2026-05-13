@@ -20,12 +20,15 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.Vec3d;
+
+import static meteordevelopment.meteorclient.MeteorClient.mc;
+import static meteordevelopment.meteorclient.utils.player.ChatUtils.error;
+import static meteordevelopment.meteorclient.utils.player.ChatUtils.info;
 
 public class SignLogger extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -82,23 +85,25 @@ public class SignLogger extends Module {
 
     int i = 1;
     for (NbtElement t : frontMessages.get()) {
-      String message = t.asString().get();
+      Optional<String> messageOpt = t.asString();
+      if (messageOpt.isEmpty()) continue;
+      String message = messageOpt.get();
 
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       frontSum += message.length();
-
       frontList.add(new Pair<>(i++, message));
     }
 
     i = 1;
     for (NbtElement t : backMessages.get()) {
-      String message = t.asString().get();
+      Optional<String> messageOpt = t.asString();
+      if (messageOpt.isEmpty()) continue;
+      String message = messageOpt.get();
 
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       backSum += message.length();
-
       backList.add(new Pair<>(i++, message));
     }
 
@@ -110,10 +115,7 @@ public class SignLogger extends Module {
 
     Text coords = Text.literal(String.format("%d %d %d", x, y, z))
                       .styled(style -> style
-                        .withClickEvent(new ClickEvent(
-                          ClickEvent.Action.SUGGEST_COMMAND,
-                          ".tp " + x + " " + y + " " + z
-                        ))
+                        .withClickEvent(new ClickEvent.SuggestCommand(".tp " + x + " " + y + " " + z))
                       );
 
     mc.execute(() -> info(
@@ -123,7 +125,7 @@ public class SignLogger extends Module {
           .append(coords)
           .append(String.format(
             " (%.2fm)",
-            pos.distanceTo(mc.player.getPos())
+            pos.distanceTo(mc.player.getEntityPos())
           ))
     ));
 
@@ -144,7 +146,7 @@ public class SignLogger extends Module {
       PlayerEntity closestPlr = null;
 
       for (PlayerEntity plr : mc.world.getPlayers()) {
-        double dist = pos.distanceTo(plr.getPos());
+        double dist = pos.distanceTo(plr.getEntityPos());
         if (dist < closestDist) {
           closestPlr = plr;
           closestDist = dist;

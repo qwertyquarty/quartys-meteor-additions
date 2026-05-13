@@ -26,7 +26,7 @@ public class EntityTPCommand extends Command {
         return SINGLE_SUCCESS;
       }
 
-      Vec3d pos = targetEntity.getPos();
+      Vec3d pos = targetEntity.getEntityPos();
       mc.player.updatePosition(pos.x, pos.y, pos.z);
       return SINGLE_SUCCESS;
     }));
