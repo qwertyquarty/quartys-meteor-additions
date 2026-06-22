@@ -30,6 +30,10 @@ bin/
 
 *.DS_Store
 
+# opencode
+
+.opencode/
+
 # fabric
 
 run/

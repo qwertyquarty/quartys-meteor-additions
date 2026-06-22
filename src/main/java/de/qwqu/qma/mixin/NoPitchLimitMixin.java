@@ -25,6 +25,13 @@ public abstract class NoPitchLimitMixin {
   @Shadow
   private float yaw;
 
+  @Inject(method = "setPitch", at = @At("HEAD"), cancellable = true)
+  private void onSetPitch(float pitch, CallbackInfo ci) {
+    if (!Modules.get().get(CameraUtils.class).noPitchLimit.get()) return;
+    this.pitch = pitch;
+    ci.cancel();
+  }
+
   @Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
   private void removePitchClamp(double cursorDeltaX, double cursorDeltaY, CallbackInfo ci) {
     if (!Modules.get().get(CameraUtils.class).noPitchLimit.get()) return;
