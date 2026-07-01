@@ -54,6 +54,7 @@ public class SignLogger extends Module {
 
     Vec3d pos = pkt.getPos().toCenterPos().subtract(0, .5, 0);
     NbtCompound nbt = pkt.getNbt();
+    if (nbt == null) return;
 
     Optional<NbtCompound> frontText = nbt.getCompound("front_text");
     Optional<NbtCompound> backText = nbt.getCompound("back_text");
