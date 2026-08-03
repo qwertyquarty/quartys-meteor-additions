@@ -13,7 +13,7 @@ import meteordevelopment.orbit.EventHandler;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.gui.screen.DisconnectedScreen;
+import net.minecraft.client.gui.screens.DisconnectedScreen;
 
 public class SpamPlus extends Module {
   public static String generateRandomUnicodeString(int length, int minRange, int range) {

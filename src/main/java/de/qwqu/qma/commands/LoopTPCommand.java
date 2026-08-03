@@ -6,7 +6,7 @@ import de.qwqu.qma.arguments.ClientPosArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 
 public class LoopTPCommand extends Command {
   public LoopTPCommand() {
@@ -14,14 +14,14 @@ public class LoopTPCommand extends Command {
   }
 
   @Override
-  public void build(LiteralArgumentBuilder<CommandSource> builder) {
+  public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
     builder.then(argument("pos", ClientPosArgumentType.pos()).executes(ctx -> {
       if (!Modules.get().get("loop-teleport").isActive())
         Modules.get().get("loop-teleport").toggle();
 
-      Addon.ltp_x = ClientPosArgumentType.getPos(ctx, "pos").x;
-      Addon.ltp_y = ClientPosArgumentType.getPos(ctx, "pos").y;
-      Addon.ltp_z = ClientPosArgumentType.getPos(ctx, "pos").z;
+      Addon.ltp_x = ClientPosArgumentType.getPos(ctx, "pos").x();
+      Addon.ltp_y = ClientPosArgumentType.getPos(ctx, "pos").y();
+      Addon.ltp_z = ClientPosArgumentType.getPos(ctx, "pos").z();
 
       return SINGLE_SUCCESS;
     }));

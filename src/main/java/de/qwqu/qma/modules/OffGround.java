@@ -5,17 +5,17 @@ import meteordevelopment.orbit.EventHandler;
 
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.mixin.PlayerMoveC2SPacketAccessor;
+import meteordevelopment.meteorclient.mixin.ServerboundMovePlayerPacketAccessor;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.IntSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
 
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 
 public class OffGround extends Module {
   public OffGround() {
@@ -35,7 +35,7 @@ public class OffGround extends Module {
   @Override
   public void onActivate() {
     if (sendFallFlying.get() && !reactive.get()) {
-      mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+      mc.getConnection().send(new ServerboundPlayerCommandPacket(mc.player, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
     }
     ticks = 0;
   }
@@ -43,7 +43,7 @@ public class OffGround extends Module {
   @Override
   public void onDeactivate() {
     if (sendOnGround.get()) {
-      mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true, mc.player.horizontalCollision));
+      mc.getConnection().send(new ServerboundMovePlayerPacket.StatusOnly(true, mc.player.horizontalCollision));
     }
   }
 
@@ -52,7 +52,7 @@ public class OffGround extends Module {
     if (!spamFallFlying.get() || reactive.get()) return;
 
     if (ticks >= spamDelay.get()) {
-      mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+      mc.getConnection().send(new ServerboundPlayerCommandPacket(mc.player, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
       ticks = 0;
     } else {
       ticks++;
@@ -62,13 +62,13 @@ public class OffGround extends Module {
   @EventHandler
   private void onReceive(PacketEvent.Receive event) {
     if (!reactive.get()) return;
-    if (!(event.packet instanceof EntityTrackerUpdateS2CPacket pkt)) return;
+    if (!(event.packet instanceof ClientboundSetEntityDataPacket pkt)) return;
     if (pkt.id() != mc.player.getId()) return;
 
-    for (DataTracker.SerializedEntry<?> entry : pkt.trackedValues()) {
+    for (SynchedEntityData.DataValue<?> entry : pkt.packedItems()) {
       if (entry.id() == 0 && entry.value() instanceof Byte b) {
         if ((b & 0x80) == 0) {
-          mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+          mc.getConnection().send(new ServerboundPlayerCommandPacket(mc.player, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
         }
       }
     }
@@ -76,9 +76,9 @@ public class OffGround extends Module {
 
   @EventHandler
   public void onSend(PacketEvent.Send event) {
-    if (!(event.packet instanceof PlayerMoveC2SPacket pkt))
+    if (!(event.packet instanceof ServerboundMovePlayerPacket pkt))
       return;
 
-    ((PlayerMoveC2SPacketAccessor) pkt).meteor$setOnGround(false);
+    ((ServerboundMovePlayerPacketAccessor) pkt).meteor$setOnGround(false);
   }
 }

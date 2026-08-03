@@ -1,8 +1,8 @@
 package de.qwqu.qma.modules;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.systems.modules.Module;
@@ -17,15 +17,15 @@ public class AutoCross extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Pre event) {
-    ItemStack stack = mc.player.getMainHandStack();
+    ItemStack stack = mc.player.getMainHandItem();
 
     if (!(stack.getItem().equals(Items.CROSSBOW))) return;
 
-    if (mc.player.getItemUseTimeLeft() == 0) {
-      if (mc.player.isUsingItem()) mc.interactionManager.stopUsingItem(mc.player);
+    if (mc.player.getUseItemRemainingTicks() == 0) {
+      if (mc.player.isUsingItem()) mc.gameMode.releaseUsingItem(mc.player);
 
-      if (!stack.get(DataComponentTypes.CHARGED_PROJECTILES).isEmpty())
-        mc.interactionManager.interactItem(mc.player, mc.player.getActiveHand());
+      if (!stack.get(DataComponents.CHARGED_PROJECTILES).isEmpty())
+        mc.gameMode.useItem(mc.player, mc.player.getUsedItemHand());
     }
   }
 }

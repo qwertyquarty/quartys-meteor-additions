@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
 
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 
 public class InfoCommand extends Command {
   public InfoCommand() {
@@ -12,7 +12,7 @@ public class InfoCommand extends Command {
   }
 
   @Override
-  public void build(LiteralArgumentBuilder<CommandSource> builder) {
+  public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
     builder.then(argument("message", StringArgumentType.greedyString()).executes(ctx -> {
       String msg = StringArgumentType.getString(ctx, "message");
 

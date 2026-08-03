@@ -17,11 +17,11 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Position;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+
+import net.minecraft.world.phys.Vec3;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
 
@@ -111,7 +111,7 @@ public class Stick extends Module {
   private boolean entityCheck(Entity entity) {
     if (entity.equals(mc.player) || entity.equals(mc.getCameraEntity()))
       return false;
-    if ((entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) || !entity.isAlive())
+    if (!entity.isAlive())
       return false;
     if (!PlayerUtils.isWithin(entity, range.get()))
       return false;
@@ -123,13 +123,13 @@ public class Stick extends Module {
   @EventHandler
   private void onMouseButton(MouseClickEvent event) {
     if (event.action == KeyAction.Press && event.button() == GLFW_MOUSE_BUTTON_MIDDLE
-        && mc.currentScreen == null) {
-      if (mc.targetedEntity instanceof PlayerEntity player) {
+        && mc.screen == null) {
+      if (mc.crosshairPickEntity instanceof Player player) {
         Addon.stick_targetName = player.getName().getString();
         Addon.stick_targetEntity = null;
         Util.addStickerTarget(Addon.stick_targetName);
-      } else if (mc.targetedEntity != null) {
-        Addon.stick_targetEntity = mc.targetedEntity;
+      } else if (mc.crosshairPickEntity != null) {
+        Addon.stick_targetEntity = mc.crosshairPickEntity;
         Addon.stick_targetName = "";
       } else {
         Addon.stick_targetName = "";
@@ -142,7 +142,7 @@ public class Stick extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    if ((Addon.stick_targetEntity != null && Addon.stick_targetEntity.isPlayer()) || Addon.stick_targetName != "")
+    if ((Addon.stick_targetEntity != null && Addon.stick_targetEntity instanceof Player) || Addon.stick_targetName != "")
       Addon.stick_targetEntity = Util.getTargetFromName(Addon.stick_targetName);
 
     Entity target = Addon.stick_targetEntity;
@@ -164,29 +164,29 @@ public class Stick extends Module {
     }
 
     if (rotate.get())
-      Rotations.rotate(target.getBodyYaw(), 0);
+      Rotations.rotate(target.getYRot(), 0);
 
     switch (followMode.get()) {
       case Head -> {
-        Position head = target.raycast(-1 + offset.get().z, 1f / 20f, false).getPos();
-        mc.player.setPosition(
-            head.getX() + offset.get().x + sineWave,
-            Math.max(minY.get(), head.getY() + offset.get().y),
-            head.getZ() + cosWave);
+        Vec3 head = target.getEyePosition().add(target.getViewVector(1.0F).scale(-1 + offset.get().z));
+        mc.player.setPos(
+            head.x() + offset.get().x + sineWave,
+            Math.max(minY.get(), head.y() + offset.get().y),
+            head.z() + cosWave);
       }
       case Body -> {
-        mc.player.setPosition(
+        mc.player.setPos(
             target.getX() + offset.get().x + sineWave,
             Math.max(minY.get(), target.getY() + offset.get().y),
             target.getZ() + offset.get().z + cosWave);
       }
       case ViewAngle -> {
-        Vec3d vec = target.getRotationVec(1.0F);
-        vec = vec.multiply(viewAngleMultiplier.get());
-        mc.player.setPosition(
-            target.getX() + offset.get().x + vec.x,
-            Math.max(minY.get(), target.getY() + offset.get().y + vec.y),
-            target.getZ() + offset.get().z + vec.z);
+        Vec3 vec = target.getViewVector(1.0F);
+        vec = vec.scale(viewAngleMultiplier.get());
+        mc.player.setPos(
+            target.getX() + offset.get().x + vec.x(),
+            Math.max(minY.get(), target.getY() + offset.get().y + vec.y()),
+            target.getZ() + offset.get().z + vec.z());
       }
     }
   }
@@ -200,7 +200,7 @@ public class Stick extends Module {
     TargetUtils.getList(targets, this::entityCheck, SortPriority.LowestDistance, 1);
     if (!targets.isEmpty()) {
       Entity closest = targets.get(0);
-      if (closest instanceof PlayerEntity) {
+      if (closest instanceof Player) {
         Addon.stick_targetName = closest.getName().getString();
         Addon.stick_targetEntity = null;
       } else {

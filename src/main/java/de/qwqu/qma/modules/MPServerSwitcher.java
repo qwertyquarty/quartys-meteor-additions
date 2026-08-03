@@ -13,8 +13,8 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.orbit.EventHandler;
 
-import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
+import net.minecraft.world.phys.Vec3;
 
 public class MPServerSwitcher extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -51,7 +51,7 @@ public class MPServerSwitcher extends Module {
   private boolean msgSent = false;
   public boolean inLobby = false;
   private boolean teleported = false;
-  private Vec3d lastPos = new Vec3d(0, 0, 0);
+  private Vec3 lastPos = new Vec3(0, 0, 0);
   private float lastYaw = 0;
   private float lastPitch = 0;
 
@@ -67,7 +67,7 @@ public class MPServerSwitcher extends Module {
   @EventHandler
   private void onPacket(PacketEvent.Receive event) {
     if (msgSent) return;
-    if (!(event.packet instanceof ChunkDataS2CPacket)) return;
+    if (!(event.packet instanceof ClientboundLevelChunkWithLightPacket)) return;
     if (! inLobby) return;
 
     ChatUtils.sendPlayerMsg("/server mineplay-" + targetServer.get());
@@ -79,24 +79,24 @@ public class MPServerSwitcher extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    inLobby = mc.getNetworkHandler().getBrand().equals(BRAND);
+    inLobby = mc.getConnection().serverBrand().equals(BRAND);
     if (inLobby) return;
 
     if (!preservePosition.get()) return;
 
-    if (mc.player.getEntityPos().equals(lastPos) || teleported) {
+    if (mc.player.position().equals(lastPos) || teleported) {
       teleported = true;
     } else {
-      mc.player.setVelocity(0, 0, 0);
-      mc.player.setPosition(lastPos);
-      mc.player.setYaw(lastYaw);
-      mc.player.setPitch(lastPitch);
+      mc.player.setDeltaMovement(0, 0, 0);
+      mc.player.setPos(lastPos.x, lastPos.y, lastPos.z);
+      mc.player.setYRot(lastYaw);
+      mc.player.setXRot(lastPitch);
       return;
     }
 
-    lastPos = mc.player.getEntityPos();
-    lastYaw = mc.player.getYaw();
-    lastPitch = mc.player.getPitch();
+    lastPos = mc.player.position();
+    lastYaw = mc.player.getYRot();
+    lastPitch = mc.player.getXRot();
   }
 
   @EventHandler

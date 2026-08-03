@@ -63,6 +63,6 @@ public class Orbit extends Module {
     double newY = toggleY.get() ? Addon.orbit_y : mc.player.getY();
     double newZ = Addon.orbit_z + (toggleZ.get() ? z : 0);
 
-    mc.player.setPosition(newX, newY, newZ);
+    mc.player.setPos(newX, newY, newZ);
   }
 }

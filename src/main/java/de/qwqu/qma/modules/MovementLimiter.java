@@ -9,8 +9,8 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.orbit.EventHandler;
 
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.world.phys.Vec3;
 
 public class MovementLimiter extends Module {
   private final SettingGroup sgGeneral = this.settings.getDefaultGroup();
@@ -50,7 +50,7 @@ public class MovementLimiter extends Module {
       .build());
 
   private int packet = 0;
-  private Vec3d lastPos = new Vec3d(0, 0, 0);
+  private Vec3 lastPos = new Vec3(0, 0, 0);
 
   public MovementLimiter() {
     super(Addon.CATEGORY, "movement-limiter", "Cancels out some movement packets in order to save packets.");
@@ -63,7 +63,7 @@ public class MovementLimiter extends Module {
 
   @EventHandler
   public void onSend(PacketEvent.Send event) {
-    if (!(event.packet instanceof PlayerMoveC2SPacket))
+    if (!(event.packet instanceof ServerboundMovePlayerPacket))
       return;
 
     sendOn.set(Math.max(1, sendOn.get()));
@@ -71,8 +71,8 @@ public class MovementLimiter extends Module {
     if (packet % sendOn.get() != 0) {
       event.cancel();
     } else {
-      PlayerMoveC2SPacket pkt = (PlayerMoveC2SPacket) event.packet;
-      lastPos = new Vec3d(pkt.getX(mc.player.getX()), pkt.getY(mc.player.getY()), pkt.getZ(mc.player.getZ()));
+      ServerboundMovePlayerPacket pkt = (ServerboundMovePlayerPacket) event.packet;
+      lastPos = new Vec3(pkt.getX(mc.player.getX()), pkt.getY(mc.player.getY()), pkt.getZ(mc.player.getZ()));
     }
 
     packet++;

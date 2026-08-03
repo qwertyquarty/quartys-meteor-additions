@@ -29,7 +29,7 @@ public class MileyCyrus extends Module {
 
   public void onDeactivate() {
     timer = 0;
-    mc.options.sneakKey.setPressed(false);
+    mc.options.keyShift.setDown(false);
   }
 
   public MileyCyrus() {
@@ -42,7 +42,7 @@ public class MileyCyrus extends Module {
     if (timer >= ((Integer) delay.get())) {
       timer = 0;
       isSneaking = !isSneaking;
-      mc.options.sneakKey.setPressed(isSneaking);
+      mc.options.keyShift.setDown(isSneaking);
     }
   }
 }

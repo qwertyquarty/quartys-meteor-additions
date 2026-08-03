@@ -1,6 +1,6 @@
 package de.qwqu.qma.modules;
 
-import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundForgetLevelChunkPacket;
 
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.systems.modules.Module;
@@ -16,9 +16,9 @@ public class FarSighted extends Module {
 
   @EventHandler(priority = EventPriority.HIGHEST + 69)
   private void onReceivePacket(PacketEvent.Receive event) {
-    if (!(event.packet instanceof UnloadChunkS2CPacket)) return;
+    if (!(event.packet instanceof ClientboundForgetLevelChunkPacket)) return;
 
-    mc.options.setServerViewDistance(1337);
+    mc.options.renderDistance().set(1337);
 
     event.cancel();
   }

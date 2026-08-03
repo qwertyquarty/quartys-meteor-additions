@@ -25,7 +25,7 @@ public class CameraUtils extends Module {
   private void updateRoll(boolean useRoll) {
     if (!isActive()) return;
 
-    ((RollAccess) mc.gameRenderer.getCamera()).qma$setRoll(useRoll ? roll.get().floatValue() : 0);
+    ((RollAccess) mc.gameRenderer.getMainCamera()).qma$setRoll(useRoll ? roll.get().floatValue() : 0);
   }
 
   @Override

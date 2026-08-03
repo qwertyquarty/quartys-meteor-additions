@@ -26,8 +26,8 @@
     "github:sha": "${gh_hash}"
   },
   "depends": {
-    "java": ">=21",
-    "minecraft": ">=1.21.4",
+    "java": ">=25",
+    "minecraft": ">=26.1.2",
     "meteor-client": "*"
   }
 }

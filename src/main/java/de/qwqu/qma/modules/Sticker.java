@@ -13,7 +13,7 @@ import meteordevelopment.orbit.EventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class Sticker extends Module {
   private int timer;

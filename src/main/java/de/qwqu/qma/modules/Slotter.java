@@ -9,7 +9,7 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 
 public class Slotter extends Module {
   private final SettingGroup sgGeneral = this.settings.getDefaultGroup();
@@ -35,7 +35,7 @@ public class Slotter extends Module {
   }
 
   private void ChangeSlot() {
-    PlayerInventory inv = mc.player.getInventory();
+    Inventory inv = mc.player.getInventory();
 
     int slot = inv.getSelectedSlot();
 

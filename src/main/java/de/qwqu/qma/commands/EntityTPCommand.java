@@ -5,9 +5,9 @@ import de.qwqu.qma.Util;
 import de.qwqu.qma.arguments.PlayerNameOrArgumentType;
 import meteordevelopment.meteorclient.commands.Command;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityTPCommand extends Command {
   public EntityTPCommand() {
@@ -15,7 +15,7 @@ public class EntityTPCommand extends Command {
   }
 
   @Override
-  public void build(LiteralArgumentBuilder<CommandSource> builder) {
+  public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
     builder.then(argument("player", PlayerNameOrArgumentType.create()).executes(context -> {
       String targetName = context.getInput().split(" ")[1];
 
@@ -26,8 +26,8 @@ public class EntityTPCommand extends Command {
         return SINGLE_SUCCESS;
       }
 
-      Vec3d pos = targetEntity.getEntityPos();
-      mc.player.updatePosition(pos.x, pos.y, pos.z);
+      Vec3 pos = targetEntity.position();
+      mc.player.setPos(pos.x(), pos.y(), pos.z());
       return SINGLE_SUCCESS;
     }));
   }

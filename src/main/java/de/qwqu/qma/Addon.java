@@ -3,7 +3,7 @@ package de.qwqu.qma;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import com.mojang.logging.LogUtils;
 

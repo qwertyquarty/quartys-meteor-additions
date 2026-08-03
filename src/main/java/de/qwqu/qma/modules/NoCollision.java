@@ -10,9 +10,9 @@ import meteordevelopment.orbit.EventPriority;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
 
 // from vector addon
 public class NoCollision extends Module {
@@ -57,7 +57,7 @@ public class NoCollision extends Module {
   @EventHandler(priority = EventPriority.LOWEST + 25)
   private void onCollisionShape(CollisionShapeEvent event) {
     if (validBlock(event.state.getBlock()) && !useBoundingBox.get())
-      event.shape = VoxelShapes.empty();
+      event.shape = Shapes.empty();
   }
 
   // Utils
@@ -79,7 +79,7 @@ public class NoCollision extends Module {
   @EventHandler
   private void onTick(TickEvent.Post event) {
     if (useBoundingBox.get()) {
-      mc.player.setBoundingBox(new Box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+      mc.player.setBoundingBox(new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
     }
   }
 

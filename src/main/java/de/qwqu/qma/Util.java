@@ -6,7 +6,7 @@ import meteordevelopment.meteorclient.systems.modules.Modules;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
@@ -18,7 +18,7 @@ public class Util {
 
   public static Entity getTargetFromName(String name) {
     Entity target = null;
-    for (Entity entity : mc.world.getEntities()) {
+    for (Entity entity : mc.level.entitiesForRendering()) {
       if (entity != mc.player && entity.getName().getString().equals(name)) {
         target = entity;
         break;

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import net.minecraft.client.render.Camera;
+import net.minecraft.client.Camera;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin implements CameraUtils.RollAccess {

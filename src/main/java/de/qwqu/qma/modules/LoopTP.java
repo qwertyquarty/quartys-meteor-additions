@@ -12,6 +12,6 @@ public class LoopTP extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    mc.player.setPosition(Addon.ltp_x, Addon.ltp_y, Addon.ltp_z);
+    mc.player.setPos(Addon.ltp_x, Addon.ltp_y, Addon.ltp_z);
   }
 }

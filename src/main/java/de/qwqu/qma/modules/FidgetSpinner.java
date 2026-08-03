@@ -76,7 +76,7 @@ public class FidgetSpinner extends Module {
       }
 
       case Unchanged -> {
-        newYaw = mc.player.getYaw();
+        newYaw = mc.player.getYRot();
       }
     }
 
@@ -92,7 +92,7 @@ public class FidgetSpinner extends Module {
         newPitch = constPitch.get();
       }
       case Unchanged -> {
-        newPitch = mc.player.getPitch();
+        newPitch = mc.player.getXRot();
       }
     }
 

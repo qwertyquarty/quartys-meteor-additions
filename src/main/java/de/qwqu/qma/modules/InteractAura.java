@@ -10,14 +10,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.*;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 
 public class InteractAura extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -73,14 +74,14 @@ public class InteractAura extends Module {
 
             BlockPos pos = new BlockPos(x, y, z);
 
-            BlockState state = mc.world.getBlockState(pos);
+            BlockState state = mc.level.getBlockState(pos);
 
             BooleanProperty prop = null;
 
             if (state.getBlock() instanceof LeverBlock || state.getBlock() instanceof ButtonBlock) {
-              prop = Properties.POWERED;
-            } else if (state.getBlock() instanceof DoorBlock || state.getBlock() instanceof TrapdoorBlock) {
-              prop = Properties.OPEN;
+              prop = BlockStateProperties.POWERED;
+            } else if (state.getBlock() instanceof DoorBlock || state.getBlock() instanceof TrapDoorBlock) {
+              prop = BlockStateProperties.OPEN;
             }
 
             if (!whitelist.get().contains(state.getBlock()))
@@ -90,24 +91,24 @@ public class InteractAura extends Module {
               continue;
 
             if (state.getBlock() instanceof DoorBlock) {
-              BlockPos abovePos = pos.up();
+              BlockPos abovePos = pos.above();
               if (interactedBlocks.contains(abovePos))
                 continue;
               interactedBlocks.add(abovePos);
             }
 
             if (interactMode.get() == InteractMode.Toggle) {
-              BlockHitResult result = new BlockHitResult(new Vec3d(x, y, z), Direction.UP, pos, false);
-              mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, result);
+              BlockHitResult result = new BlockHitResult(new Vec3(x, y, z), Direction.UP, pos, false);
+              mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND, result);
             }
 
             if (prop == null)
               continue;
 
-            if (interactMode.get() == InteractMode.Open && !state.get(prop) ||
-                interactMode.get() == InteractMode.Close && state.get(prop)) {
-              BlockHitResult result = new BlockHitResult(new Vec3d(x, y, z), Direction.UP, pos, false);
-              mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, result);
+            if (interactMode.get() == InteractMode.Open && !state.getValue(prop) ||
+                interactMode.get() == InteractMode.Close && state.getValue(prop)) {
+              BlockHitResult result = new BlockHitResult(new Vec3(x, y, z), Direction.UP, pos, false);
+              mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND, result);
             }
 
           }

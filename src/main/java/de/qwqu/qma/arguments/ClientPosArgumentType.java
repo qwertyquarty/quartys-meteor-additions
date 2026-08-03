@@ -8,66 +8,71 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.CoordinateArgument;
-import net.minecraft.command.argument.Vec3ArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.coordinates.WorldCoordinate;
+import net.minecraft.world.phys.Vec3;
 
 // from meteor rejects
-public class ClientPosArgumentType implements ArgumentType<Vec3d> {
-  private static final MinecraftClient mc = MinecraftClient.getInstance();
+public class ClientPosArgumentType implements ArgumentType<Vec3> {
+  private static final Minecraft mc = Minecraft.getInstance();
 
   public static ClientPosArgumentType pos() {
     return new ClientPosArgumentType();
   }
 
+  @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-    if (!(context.getSource() instanceof CommandSource)) {
+    if (!(context.getSource() instanceof SharedSuggestionProvider sharedSuggestionProvider)) {
       return Suggestions.empty();
-    } else {
-      String string = builder.getRemaining();
-      Collection<CommandSource.RelativePosition> collection2 = ((CommandSource) context.getSource())
-          .getBlockPositionSuggestions();
-
-      return CommandSource.suggestPositions(string, collection2, builder,
-          CommandManager.getCommandValidator(this::parse));
     }
+
+    String string = builder.getRemaining();
+    Collection<SharedSuggestionProvider.TextCoordinates> collection;
+    if (!string.isEmpty() && string.charAt(0) == '^') {
+      collection = Collections.singleton(SharedSuggestionProvider.TextCoordinates.DEFAULT_LOCAL);
+    } else {
+      collection = sharedSuggestionProvider.getRelevantCoordinates();
+    }
+
+    return SharedSuggestionProvider.suggestCoordinates(string, collection, builder, Commands.createValidator(this::parse));
   }
 
-  public static Vec3d getPos(final CommandContext<?> context, final String name) {
-    return context.getArgument(name, Vec3d.class);
+  public static Vec3 getPos(final CommandContext<?> context, final String name) {
+    return context.getArgument(name, Vec3.class);
   }
 
-  public Vec3d parse(StringReader reader) throws CommandSyntaxException {
+  @Override
+  public Vec3 parse(StringReader reader) throws CommandSyntaxException {
     int i = reader.getCursor();
     double x, y, z;
-    CoordinateArgument coordinateArgument = CoordinateArgument.parse(reader);
-    CoordinateArgument coordinateArgument2;
-    CoordinateArgument coordinateArgument3;
+    WorldCoordinate coordinateArgument = WorldCoordinate.parseDouble(reader, false);
+    WorldCoordinate coordinateArgument2;
+    WorldCoordinate coordinateArgument3;
     if (reader.canRead() && reader.peek() == ' ') {
       reader.skip();
-      coordinateArgument2 = CoordinateArgument.parse(reader);
+      coordinateArgument2 = WorldCoordinate.parseDouble(reader, false);
       if (reader.canRead() && reader.peek() == ' ') {
         reader.skip();
-        coordinateArgument3 = CoordinateArgument.parse(reader);
+        coordinateArgument3 = WorldCoordinate.parseDouble(reader, false);
       } else {
         reader.setCursor(i);
-        throw Vec3ArgumentType.INCOMPLETE_EXCEPTION.createWithContext(reader);
+        throw Vec3Argument.ERROR_NOT_COMPLETE.createWithContext(reader);
       }
     } else {
       reader.setCursor(i);
-      throw Vec3ArgumentType.INCOMPLETE_EXCEPTION.createWithContext(reader);
+      throw Vec3Argument.ERROR_NOT_COMPLETE.createWithContext(reader);
     }
 
-    x = coordinateArgument.toAbsoluteCoordinate(mc.player.getX());
-    y = coordinateArgument2.toAbsoluteCoordinate(mc.player.getY());
-    z = coordinateArgument3.toAbsoluteCoordinate(mc.player.getZ());
+    x = coordinateArgument.get(mc.player.getX());
+    y = coordinateArgument2.get(mc.player.getY());
+    z = coordinateArgument3.get(mc.player.getZ());
 
-    return new Vec3d(x, y, z);
+    return new Vec3(x, y, z);
   }
-
 }

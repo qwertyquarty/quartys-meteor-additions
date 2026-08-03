@@ -9,12 +9,12 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 
 public class TeleportCrash extends Module {
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-  private PlayerMoveC2SPacket packet;
+  private ServerboundMovePlayerPacket packet;
 
   private final Setting<Integer> packets = sgGeneral.add(new IntSetting.Builder()
       .name("packet-count")
@@ -48,7 +48,7 @@ public class TeleportCrash extends Module {
 
   @EventHandler
   public void onSend(PacketEvent.Send event) {
-    if (!(event.packet instanceof PlayerMoveC2SPacket packet))
+    if (!(event.packet instanceof ServerboundMovePlayerPacket packet))
       return;
 
     if (packet != this.packet) {
@@ -62,10 +62,10 @@ public class TeleportCrash extends Module {
     final double y = useY.get() ? Double.NaN : 420;
     final double z = useZ.get() ? Double.NaN : 1337;
 
-    packet = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, mc.player.isOnGround(), mc.player.horizontalCollision);
+    packet = new ServerboundMovePlayerPacket.Pos(x, y, z, mc.player.onGround(), mc.player.horizontalCollision);
 
     for (int i = 0; i < packets.get(); i++) {
-      mc.getNetworkHandler().sendPacket(packet);
+      mc.getConnection().send(packet);
     }
 
     toggle();

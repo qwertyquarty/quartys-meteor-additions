@@ -5,9 +5,9 @@ import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class Elytra extends Module {
   public Elytra() {
@@ -17,6 +17,6 @@ public class Elytra extends Module {
   @EventHandler
   private void onTick(TickEvent.Post event) {
     ItemStack elytra = new ItemStack(Items.ELYTRA);
-    mc.player.equipStack(EquipmentSlot.CHEST, elytra);
+    mc.player.setItemSlot(EquipmentSlot.CHEST, elytra);
   }
 }

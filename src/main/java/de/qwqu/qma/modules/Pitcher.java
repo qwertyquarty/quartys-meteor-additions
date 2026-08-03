@@ -26,6 +26,6 @@ public class Pitcher extends Module {
 
   @EventHandler
   private void onTick(TickEvent.Post event) {
-    Rotations.rotate(mc.player.getYaw(), pitch.get());
+    Rotations.rotate(mc.player.getYRot(), pitch.get());
   }
 }

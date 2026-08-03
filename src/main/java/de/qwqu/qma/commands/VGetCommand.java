@@ -7,32 +7,27 @@ import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.utils.player.FindItemResult;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.ItemStackArgumentType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.BuiltinRegistries;
-import net.minecraft.server.command.CommandManager;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.world.item.ItemStack;
 
 public class VGetCommand extends Command {
-  private static final CommandRegistryAccess REGISTRY_ACCESS = CommandManager
-      .createRegistryAccess(BuiltinRegistries.createWrapperLookup());
-
   public VGetCommand() {
     super("vget", "Lets you get a ghost item in survival mode.");
   }
 
   @Override
-  public void build(LiteralArgumentBuilder<CommandSource> builder) {
-    builder.then(argument("item", ItemStackArgumentType.itemStack(REGISTRY_ACCESS)).executes(context -> {
+  public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
+    builder.then(argument("item", ItemArgument.item(REGISTRY_ACCESS)).executes(context -> {
 
-      ItemStack item = ItemStackArgumentType.getItemStackArgument(context, "item").createStack(1, false);
+      ItemStack item = ItemArgument.getItem(context, "item").createItemStack(1);
       giveItem(item);
 
       return SINGLE_SUCCESS;
     }).then(argument("number", IntegerArgumentType.integer(1, 99)).executes(context -> {
-      ItemStack item = ItemStackArgumentType.getItemStackArgument(context, "item")
-          .createStack(IntegerArgumentType.getInteger(context, "number"), true);
+      ItemStack item = ItemArgument.getItem(context, "item")
+          .createItemStack(IntegerArgumentType.getInteger(context, "number"));
       giveItem(item);
 
       return SINGLE_SUCCESS;
@@ -44,6 +39,6 @@ public class VGetCommand extends Command {
     if (!fir.found())
       return;
 
-    mc.player.giveItemStack(item);
+    mc.player.getInventory().add(item);
   }
 }

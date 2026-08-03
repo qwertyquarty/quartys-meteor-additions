@@ -9,8 +9,8 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
@@ -21,8 +21,8 @@ public class PlayerNameOrArgumentType implements ArgumentType<String> {
     return INSTANCE;
   }
 
-  public static PlayerListEntry get(CommandContext<?> context) {
-    return context.getArgument("player", PlayerListEntry.class);
+  public static PlayerInfo get(CommandContext<?> context) {
+    return context.getArgument("player", PlayerInfo.class);
   }
 
   private PlayerNameOrArgumentType() {
@@ -35,8 +35,8 @@ public class PlayerNameOrArgumentType implements ArgumentType<String> {
 
   @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-    return CommandSource.suggestMatching(
-        mc.getNetworkHandler().getPlayerList().stream().map(playerListEntry -> playerListEntry.getProfile().name()),
+    return SharedSuggestionProvider.suggest(
+        mc.getConnection().getOnlinePlayers().stream().map(playerInfo -> playerInfo.getProfile().name()),
         builder);
   }
 }
