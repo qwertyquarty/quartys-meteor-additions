@@ -23,7 +23,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.Vec3;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
@@ -32,6 +31,8 @@ import static meteordevelopment.meteorclient.utils.player.ChatUtils.info;
 import static meteordevelopment.meteorclient.utils.player.ChatUtils.sendMsg;
 
 public class SignLogger extends Module {
+  private record Line(int line, String text) {}
+
   private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
   private final Setting<Boolean> logClosest = sgGeneral.add(new BoolSetting.Builder()
@@ -53,7 +54,7 @@ public class SignLogger extends Module {
   private void onReceivePacket(PacketEvent.Receive event) {
     if (!(event.packet instanceof ClientboundBlockEntityDataPacket pkt)) return;
 
-    Vec3 pos = pkt.getPos().getCenter().subtract(0, .5, 0);
+    Vec3 pos = Vec3.atCenterOf(pkt.getPos()).subtract(0, .5, 0);
     CompoundTag nbt = pkt.getTag();
     if (nbt == null) return;
 
@@ -70,8 +71,8 @@ public class SignLogger extends Module {
     int frontSum = 0;
     int backSum = 0;
 
-    ArrayList<Tuple<Integer, String>> frontList = new ArrayList<>();
-    ArrayList<Tuple<Integer, String>> backList = new ArrayList<>();
+    ArrayList<Line> frontList = new ArrayList<>();
+    ArrayList<Line> backList = new ArrayList<>();
 
     String regex = ignoreRegex.get().trim();
     Pattern ignorePattern = null;
@@ -94,7 +95,7 @@ public class SignLogger extends Module {
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       frontSum += message.length();
-      frontList.add(new Tuple<>(i++, message));
+      frontList.add(new Line(i++, message));
     }
 
     i = 1;
@@ -106,7 +107,7 @@ public class SignLogger extends Module {
       if (!regex.isEmpty() && ignorePattern.matcher(message).find()) return;
 
       backSum += message.length();
-      backList.add(new Tuple<>(i++, message));
+      backList.add(new Line(i++, message));
     }
 
     if (frontSum + backSum == 0) return;
@@ -132,14 +133,14 @@ public class SignLogger extends Module {
     ));
 
     if (frontSum > 0) {
-      for (Tuple<Integer, String> pair : frontList) {
-        mc.execute(() -> info("│ %s %s", pair.getA(), pair.getB()));
+      for (Line pair : frontList) {
+        mc.execute(() -> info("│ %s %s", pair.line(), pair.text()));
       }
     }
     if (backSum > 0) {
       if (frontSum > 0) info("├─");
-      for (Tuple<Integer, String> pair : backList) {
-        mc.execute(() -> info("│ %s %s", pair.getA(), pair.getB()));
+      for (Line pair : backList) {
+        mc.execute(() -> info("│ %s %s", pair.line(), pair.text()));
       }
     }
 

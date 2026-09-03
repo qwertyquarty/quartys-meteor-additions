@@ -14,14 +14,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 
-import static meteordevelopment.meteorclient.MeteorClient.mc;
 import static meteordevelopment.meteorclient.utils.player.ChatUtils.info;
 
-@Mixin(Minecraft.class)
-public class MinecraftClientMixin {
+@Mixin(Gui.class)
+public class GuiMixin {
     @Inject(method = "setScreen", at = @At("RETURN"))
     private void onSetScreen(Screen screen, CallbackInfo cbInfo) {
         if (screen == null) return;
@@ -54,6 +53,6 @@ public class MinecraftClientMixin {
 
         if (!isDisabled) return;
 
-        mc.setScreen(null);
+        ((Gui) (Object) this).setScreen(null);
     }
 }

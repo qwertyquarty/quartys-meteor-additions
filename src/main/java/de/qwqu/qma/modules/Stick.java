@@ -123,7 +123,7 @@ public class Stick extends Module {
   @EventHandler
   private void onMouseButton(MouseClickEvent event) {
     if (event.action == KeyAction.Press && event.button() == GLFW_MOUSE_BUTTON_MIDDLE
-        && mc.screen == null) {
+        && mc.gui.screen() == null) {
       if (mc.crosshairPickEntity instanceof Player player) {
         Addon.stick_targetName = player.getName().getString();
         Addon.stick_targetEntity = null;
