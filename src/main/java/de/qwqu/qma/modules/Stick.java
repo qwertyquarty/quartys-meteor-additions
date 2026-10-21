@@ -23,7 +23,7 @@ import net.minecraft.world.entity.player.Player;
 
 import net.minecraft.world.phys.Vec3;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_MIDDLE;
 
 // skidded from lyra addon & improved
 public class Stick extends Module {
@@ -122,7 +122,7 @@ public class Stick extends Module {
 
   @EventHandler
   private void onMouseButton(MouseClickEvent event) {
-    if (event.action == KeyAction.Press && event.button() == GLFW_MOUSE_BUTTON_MIDDLE
+    if (event.action == KeyAction.Press && event.button() == MOUSE_BUTTON_MIDDLE
         && mc.gui.screen() == null) {
       if (mc.crosshairPickEntity instanceof Player player) {
         Addon.stick_targetName = player.getName().getString();

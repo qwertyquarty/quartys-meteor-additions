@@ -19,7 +19,7 @@ public class AntiServerTP extends Module {
     if (!(event.packet instanceof ClientboundPlayerPositionPacket pkt)) return;
     event.cancel();
 
-    mc.getConnection().send(new ServerboundAcceptTeleportationPacket(pkt.id()));
+    mc.getConnection().send(new ServerboundAcceptTeleportationPacket(pkt.id(), mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYRot(), mc.player.getXRot()));
   }
 
 }
